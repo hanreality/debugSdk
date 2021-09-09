@@ -1,0 +1,3 @@
+rootProject.name = "debugSdk"
+include ':app'
+include ':debugSdk'
