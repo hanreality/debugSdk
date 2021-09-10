@@ -1,0 +1,29 @@
+/**
+ * 添加依赖库的源
+ * @param handler repositories
+ */
+static def addRepository(RepositoryHandler handler) {
+    handler.maven { url 'https://maven.aliyun.com/repository/public' }
+    handler.maven { url 'https://maven.aliyun.com/repository/google' }
+    handler.maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+    handler.maven { url "https://jitpack.io" }
+    handler.maven { url 'http://nexus2.tingyun.com/nexus/content/repositories/snapshots/' }
+    handler.maven { url 'http://mirrors.huaweicloud.com/repository/maven/huaweicloudsdk/' }
+    handler.maven { url 'http://mirrors.huaweicloud.com/repository/maven/' }
+    handler.maven { url 'https://developer.huawei.com/repo/' }
+    handler.maven { url 'http://10.4.255.180:8081/nexus/content/repositories/android-releases/' }
+    handler.maven { url 'http://10.4.255.180:8081/nexus/content/repositories/android-snapshots/' }
+    handler.maven { url 'http://10.0.6.34:8081/repository/jjyp_release/' }
+    handler.maven { url 'http://10.0.6.34:8081/repository/jjyp_snapshots/' }
+    //handler.maven { url "https://artifactory.paytm.in/libs-release-local" }
+//    handler.maven { url uri('/repo') }
+//    handler.maven { url uri('/repo-debug') }
+//    flatDir {
+//        dirs 'libs'
+//        dirs project(':KKCommon').file('libs')
+//    }
+
+}
+
+// 添加到全局的变量中
+ext.addRepository = this.&addRepository
