@@ -17,6 +17,10 @@ class SampleActivity : AppCompatActivity() {
             override fun changeServer() {
                 Toast.makeText(baseContext, "changeServer", Toast.LENGTH_LONG).show()
             }
+
+            override fun disable() {
+                Toast.makeText(baseContext, "disable", Toast.LENGTH_LONG).show()
+            }
         })
         DebugManager.INSTANCE.enable = true
 

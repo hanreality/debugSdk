@@ -6,4 +6,6 @@ package com.melot.android.debug.sdk.proxy
  */
 interface IDebugProxy {
     fun changeServer()
+
+    fun disable()
 }
