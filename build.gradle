@@ -2,7 +2,7 @@
 buildscript {
     repositories {
         maven { url = 'http://10.0.6.34:8081/repository/jjyp_release/'}
-        maven { url = 'https://maven.aliyun.com/repository/google' }
+        maven { url = 'https://maven.aliyun.com/nexus/content/groups/public/' }
         google()
         mavenCentral()
     }
@@ -19,7 +19,7 @@ buildscript {
 allprojects {
     repositories {
         maven { url = 'http://10.0.6.34:8081/repository/jjyp_release/'}
-        maven { url = 'https://maven.aliyun.com/repository/google' }
+        maven { url = 'https://maven.aliyun.com/nexus/content/groups/public/' }
         google()
         mavenCentral()
     }
