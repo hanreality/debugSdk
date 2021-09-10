@@ -4,7 +4,6 @@ buildscript {
         maven { url = 'http://10.0.6.34:8081/repository/jjyp_release/'}
         google()
         mavenCentral()
-        mavenLocal()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.1"
@@ -19,9 +18,9 @@ buildscript {
 allprojects {
     repositories {
         maven { url = 'http://10.0.6.34:8081/repository/jjyp_release/'}
+        maven { url 'https://maven.aliyun.com/repository/' }
         google()
         mavenCentral()
-        mavenLocal()
     }
 }
 
