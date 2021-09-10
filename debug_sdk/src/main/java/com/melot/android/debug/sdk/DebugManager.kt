@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import com.melot.android.debug.sdk.proxy.IDebugProxy
-import com.melot.android.debug.sdk.view.DebugMenuButton
 import com.melot.android.debug.sdk.view.DebugView
 
 /**
@@ -18,6 +17,14 @@ class DebugManager {
     private val debugViewTag = "com.melot.android.debugview"
     private var debugView: DebugView? = null
     var enable: Boolean = false // debug开关
+        set(value) {
+            field = value
+            if (value) {
+                addDebugView()
+            } else {
+                removeDebugView()
+            }
+        }
     private lateinit var application: Application
     var currentActivity: Activity? = null
     var debugProxy: IDebugProxy? = null
@@ -30,7 +37,6 @@ class DebugManager {
 
     fun registerApplication(application: Application) {
         this.application = application
-        addDebugView()
     }
 
     fun registerDebugProxy(debugProxy: IDebugProxy) {
@@ -43,23 +49,49 @@ class DebugManager {
         }
     }
 
-
-    fun addDebugView() {
-        checkApplication()
-        application.registerActivityLifecycleCallbacks(lifecycleCallbacks)
+    private fun attachDebugView(activity: Activity?) {
+        if (!enable) {
+            return
+        }
+        takeIf { debugView == null && activity != null }?.apply {
+            debugView = DebugView(activity)
+            debugView?.tag = debugViewTag
+        }
+        try {
+            val decorView = activity?.window?.decorView as? ViewGroup
+            decorView?.let { _decorView ->
+                if (_decorView.findViewWithTag<View?>(debugViewTag) == null) {
+                    debugView?.let {
+                        _decorView.addView(it)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
-    fun removeDebugView() {
-        checkApplication()
-        application.unregisterActivityLifecycleCallbacks(lifecycleCallbacks)
+    private fun detachDebugView(activity: Activity?) {
         debugView?.let {
-            val decorView = currentActivity?.window?.decorView as? ViewGroup
+            val decorView = activity?.window?.decorView as? ViewGroup
             decorView?.let {
                 if (it.findViewWithTag<View?>(debugViewTag) != null) {
                     it.removeView(debugView)
                 }
             }
         }
+    }
+
+    private fun addDebugView() {
+        checkApplication()
+        application.registerActivityLifecycleCallbacks(lifecycleCallbacks)
+        attachDebugView(currentActivity)
+    }
+
+    private fun removeDebugView() {
+        checkApplication()
+        application.unregisterActivityLifecycleCallbacks(lifecycleCallbacks)
+        detachDebugView(currentActivity)
     }
 
     private val lifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
@@ -73,31 +105,11 @@ class DebugManager {
 
         override fun onActivityResumed(activity: Activity) {
             currentActivity = activity
-            takeIf { debugView == null }?.apply {
-                debugView = DebugView(activity)
-                debugView?.tag = debugViewTag
-            }
-            try {
-                val decorView = activity.window?.decorView as? ViewGroup
-                decorView?.let {
-                    if (it.findViewWithTag<View?>(debugViewTag) == null) {
-                        it.addView(debugView)
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            attachDebugView(activity)
         }
 
         override fun onActivityPaused(activity: Activity) {
-            debugView?.let {
-                val decorView = activity.window?.decorView as? ViewGroup
-                decorView?.let {
-                    if (it.findViewWithTag<View?>(debugViewTag) != null) {
-                        it.removeView(debugView)
-                    }
-                }
-            }
+            detachDebugView(activity)
         }
 
         override fun onActivityStopped(activity: Activity) {

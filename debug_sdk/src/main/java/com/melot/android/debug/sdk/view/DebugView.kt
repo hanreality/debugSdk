@@ -33,7 +33,7 @@ class DebugView @JvmOverloads constructor(
     }
 
     private fun showDebugDialog() {
-        val items = arrayOf("Change Server?", "切换语言", "取消")
+        val items = arrayOf("切换服务器", "切换语言", "取消")
         debugDialog = AlertDialog.Builder(DebugManager.INSTANCE.currentActivity)
             .setTitle("调试工具")
             .setItems(items) { dialog, which ->

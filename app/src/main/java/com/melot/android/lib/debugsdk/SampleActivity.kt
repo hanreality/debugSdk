@@ -18,6 +18,7 @@ class SampleActivity : AppCompatActivity() {
                 Toast.makeText(baseContext, "changeServer", Toast.LENGTH_LONG).show()
             }
         })
+        DebugManager.INSTANCE.enable = true
 
         findViewById<View>(R.id.open).setOnClickListener {
             startActivity(Intent(this, TargetActivity::class.java))
