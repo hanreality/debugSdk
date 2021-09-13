@@ -1,13 +1,10 @@
 package com.melot.android.debug.sdk.view
 
-import android.app.ActivityManager
-import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
-import android.provider.Settings
 import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
+import androidx.fragment.app.FragmentActivity
 import com.melot.android.debug.sdk.DebugManager
 import com.melot.android.debug.sdk.R
 
@@ -22,7 +19,6 @@ class DebugView @JvmOverloads constructor(
 ) : RelativeLayout(context, attrs, defStyleAttr) {
 
     private val debugMenuButton: DebugMenuButton
-    private var debugDialog: AlertDialog? = null
 
     init {
         View.inflate(context, R.layout.layout_debug_view, this)
@@ -33,27 +29,9 @@ class DebugView @JvmOverloads constructor(
     }
 
     private fun showDebugDialog() {
-        val items = arrayOf("切换服务器", "切换语言", "退下", "取消")
-        debugDialog = AlertDialog.Builder(DebugManager.INSTANCE.currentActivity)
-            .setTitle("调试工具")
-            .setItems(items) { dialog, which ->
-                when (which) {
-                    0 -> {
-                        DebugManager.INSTANCE.debugProxy?.changeServer()
-                    }
-                    1 -> {
-                        switchLanguage()
-                    }
-                    2 -> {
-                        DebugManager.INSTANCE.enable = false
-                        DebugManager.INSTANCE.debugProxy?.disable()
-                    }
-                }
-            }.create()
-        debugDialog?.show()
-    }
-
-    private fun switchLanguage() {
-        DebugManager.INSTANCE.currentActivity?.startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+        (DebugManager.INSTANCE.currentActivity as? FragmentActivity)?.let {
+            val debugDialog = DebugActionView()
+            debugDialog.show(it.supportFragmentManager, "debugActionView")
+        }
     }
 }
