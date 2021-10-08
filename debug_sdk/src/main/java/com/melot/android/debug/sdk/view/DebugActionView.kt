@@ -61,7 +61,7 @@ class DebugActionView : DialogFragment() {
                     .append(activity::class.java.name)
 
                 activity.intent.extras?.let { bundle ->
-                    var extras = StringBuilder()
+                    val extras = StringBuilder()
                     bundle.keySet().forEach {
                         extras.append(it).append("=").append(bundle[it]).append(",")
                     }
