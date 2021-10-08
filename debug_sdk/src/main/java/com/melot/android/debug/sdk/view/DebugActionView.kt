@@ -70,10 +70,12 @@ class DebugActionView : DialogFragment() {
                 }
                 (activity as? FragmentActivity)?.let {
                     it.supportFragmentManager.fragments.iterator().forEach {
-                        if (it.isAdded && it.isVisible && it !is DebugActionView) {
+                        if (it.isAdded && it.isVisible && it.userVisibleHint && it !is DebugActionView) {
                             info.append("\nFragment: ")
                                 .append(it::class.java.name)
-                                .append("{${it.arguments}}")
+                            it?.arguments?.let {
+                                info.append("{${it}}")
+                            }
                         }
                     }
                 }
