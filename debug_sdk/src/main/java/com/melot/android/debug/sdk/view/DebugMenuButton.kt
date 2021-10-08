@@ -40,8 +40,6 @@ class DebugMenuButton @JvmOverloads constructor(
         wm.defaultDisplay.getMetrics(dm)
         screenWidth = dm.widthPixels
         screenHeight = dm.heightPixels
-        println(screenHeight)
-        println(screenWidth)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

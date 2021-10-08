@@ -11,6 +11,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import com.melot.android.debug.sdk.DebugManager
 import com.melot.android.debug.sdk.R
 import com.melot.android.debug.sdk.model.DebugLoginModel
@@ -53,11 +54,31 @@ class DebugActionView : DialogFragment() {
         currentPageInfo = view.findViewById(R.id.current_page_info)
         getCurrentPage = view.findViewById(R.id.get_current_page_info)
         getCurrentPage.setOnClickListener {
-            currentPageInfo.visibility = View.VISIBLE
-            val info = StringBuilder()
-                .append("Activity: ")
-                .append(DebugManager.INSTANCE.currentActivity?.componentName)
-            currentPageInfo.text = info.toString()
+            DebugManager.INSTANCE.currentActivity?.let { activity ->
+                currentPageInfo.visibility = View.VISIBLE
+                val info = StringBuilder()
+                    .append("Activity: ")
+                    .append(activity::class.java.name)
+
+                activity.intent.extras?.let { bundle ->
+                    var extras = StringBuilder()
+                    bundle.keySet().forEach {
+                        extras.append(it).append("=").append(bundle[it]).append(",")
+                    }
+                    extras.replace(extras.lastIndex, extras.length, "")
+                    info.append("{Bundle[${extras}]}")
+                }
+                (activity as? FragmentActivity)?.let {
+                    it.supportFragmentManager.fragments.iterator().forEach {
+                        if (it.isAdded && it.isVisible && it !is DebugActionView) {
+                            info.append("\nFragment: ")
+                                .append(it::class.java.name)
+                                .append("{${it.arguments}}")
+                        }
+                    }
+                }
+                currentPageInfo.text = info.toString()
+            }
         }
 
         quickLogin = view.findViewById(R.id.quick_login)

@@ -13,6 +13,7 @@ import com.melot.android.debug.sdk.proxy.DebugConfig
 import com.melot.android.debug.sdk.proxy.IDebugProxy
 
 class SampleActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample)
@@ -45,7 +46,13 @@ class SampleActivity : AppCompatActivity() {
 
         findViewById<View>(R.id.open).setOnClickListener {
             val intent = Intent(this, TargetActivity::class.java)
+            intent.putExtra("hell0", 1233)
             startActivity(intent)
         }
+
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.fragment_content, BlankFragment.newInstance("param1", "param2"))
+            .commit()
     }
 }
