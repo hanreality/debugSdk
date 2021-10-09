@@ -68,13 +68,21 @@ class DebugActionView : DialogFragment() {
                     extras.replace(extras.lastIndex, extras.length, "")
                     info.append("{Bundle[${extras}]}")
                 }
-                (activity as? FragmentActivity)?.let {
-                    it.supportFragmentManager.fragments.iterator().forEach {
-                        if (it.isAdded && it.isVisible && it.userVisibleHint && it !is DebugActionView) {
-                            info.append("\nFragment: ")
-                                .append(it::class.java.name)
-                            it?.arguments?.let {
-                                info.append("{${it}}")
+                (activity as? FragmentActivity)?.supportFragmentManager?.fragments?.let {
+                    if (it.size > 0) {
+                        var fragment = it[it.size - 1]
+                        if (fragment is DebugActionView) {
+                            fragment = if (it.size - 2 >= 0) {
+                                it[it.size - 2]
+                            } else null
+                        }
+                        fragment?.let {
+                            if (it.isAdded && it.isVisible && it.userVisibleHint ) {
+                                info.append("\nFragment: ")
+                                    .append(it::class.java.name)
+                                it.arguments?.let {
+                                    info.append("{${it}}")
+                                }
                             }
                         }
                     }
