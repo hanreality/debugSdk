@@ -2,16 +2,18 @@ package com.melot.android.debug.sdk.view
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.provider.Settings
+import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.CompoundButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.widget.SwitchCompat
 import com.melot.android.debug.sdk.DebugManager
 import com.melot.android.debug.sdk.R
 import com.melot.android.debug.sdk.model.DebugLoginModel
@@ -21,8 +23,12 @@ import com.melot.android.debug.sdk.proxy.DebugConfig
  * Author: han.chen
  * Time: 2021/9/13 11:29
  */
-class DebugActionView : DialogFragment() {
-
+class DebugActionView @JvmOverloads constructor(
+    context: Context?,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : LinearLayout(context, attrs, defStyleAttr) {
+    val container:View
     lateinit var closeView: View
     lateinit var exit: View
     lateinit var changeServer: TextView
@@ -30,25 +36,28 @@ class DebugActionView : DialogFragment() {
     lateinit var getCurrentPage: View
     lateinit var currentPageInfo: TextView
     lateinit var quickLogin: View
+    lateinit var switchFragmentInfo: SwitchCompat
     var config: DebugConfig? = null
     var dialog: AlertDialog? = null
+    var switchFragmentCallBack: CompoundButton.OnCheckedChangeListener? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val fragmentView = inflater.inflate(R.layout.layout_debug_action_view, container, false)
+    init {
+        gravity = Gravity.CENTER
+        orientation = VERTICAL
+        inflate(context, R.layout.layout_debug_action_view, this)
+        container = findViewById(R.id.container)
+        container.setOnClickListener {
+            dismiss()
+        }
         config = DebugManager.INSTANCE.debugProxy?.debugConfig()
-        initView(fragmentView)
-        return fragmentView
+        initView(this)
     }
 
 
     private fun initView(view: View) {
         closeView = view.findViewById(R.id.close_view)
         closeView.setOnClickListener {
-            dismissAllowingStateLoss()
+            dismiss()
         }
 
         currentPageInfo = view.findViewById(R.id.current_page_info)
@@ -68,33 +77,19 @@ class DebugActionView : DialogFragment() {
                     extras.replace(extras.lastIndex, extras.length, "")
                     info.append("{Bundle[${extras}]}")
                 }
-                (activity as? FragmentActivity)?.supportFragmentManager?.fragments?.let {
-                    if (it.size > 0) {
-                        var fragment = it[it.size - 1]
-                        if (fragment is DebugActionView) {
-                            fragment = if (it.size - 2 >= 0) {
-                                it[it.size - 2]
-                            } else null
-                        }
-                        fragment?.let {
-                            if (it.isAdded && it.isVisible && it.userVisibleHint ) {
-                                info.append("\nFragment: ")
-                                    .append(it::class.java.name)
-                                it.arguments?.let {
-                                    info.append("{${it}}")
-                                }
-                            }
-                        }
-                    }
-                }
                 currentPageInfo.text = info.toString()
             }
+        }
+
+        switchFragmentInfo = view.findViewById(R.id.switch_compat_fragment)
+        switchFragmentInfo.setOnCheckedChangeListener { buttonView, isChecked ->
+            switchFragmentCallBack?.onCheckedChanged(buttonView, isChecked)
         }
 
         quickLogin = view.findViewById(R.id.quick_login)
         quickLogin.setOnClickListener {
             showQuickDialog()
-            dismissAllowingStateLoss()
+            dismiss()
         }
 
         changeServer = view.findViewById(R.id.change_server)
@@ -107,12 +102,12 @@ class DebugActionView : DialogFragment() {
         }
         changeServer.setOnClickListener {
             DebugManager.INSTANCE.debugProxy?.changeServer()
-            dismissAllowingStateLoss()
+            dismiss()
         }
 
         changeLanguage = view.findViewById(R.id.change_language)
         changeLanguage.setOnClickListener {
-            dismissAllowingStateLoss()
+            dismiss()
             switchLanguage()
         }
 
@@ -120,7 +115,7 @@ class DebugActionView : DialogFragment() {
         exit.setOnClickListener {
             DebugManager.INSTANCE.debugProxy?.disable()
             DebugManager.INSTANCE.enable = false
-            dismissAllowingStateLoss()
+            dismiss()
         }
 
     }
@@ -149,12 +144,12 @@ class DebugActionView : DialogFragment() {
         dialog?.show()
     }
 
-    override fun dismissAllowingStateLoss() {
-        try {
-            super.dismissAllowingStateLoss()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    fun dismiss() {
+        visibility = View.GONE
+    }
+
+    fun show() {
+        visibility = View.VISIBLE
     }
 
     inner class AccountAdapter(val context: Context, val items: ArrayList<DebugLoginModel>?) :

@@ -54,7 +54,7 @@ class DebugManager {
             return
         }
         takeIf { debugView == null && activity != null }?.apply {
-            debugView = DebugView(activity)
+            debugView = DebugView(activity!!)
             debugView?.tag = debugViewTag
         }
         try {
