@@ -16,7 +16,7 @@ import com.melot.android.debug.sdk.view.layer.FragmentNameLayer
  * Time: 2021/9/9 16:18
  */
 class DebugView constructor(
-    context: Context,
+    context: Context
 ) : FrameLayout(context) {
 
     private val debugMenuButton: DebugMenuButton
