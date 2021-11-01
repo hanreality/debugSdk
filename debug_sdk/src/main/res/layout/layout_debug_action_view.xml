@@ -65,7 +65,7 @@
                     android:textSize="12dp"
                     android:visibility="gone" />
 
-                <androidx.appcompat.widget.SwitchCompat
+                <Switch
                     android:id="@+id/switch_compat_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

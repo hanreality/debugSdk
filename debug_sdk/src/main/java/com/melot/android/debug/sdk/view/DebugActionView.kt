@@ -8,12 +8,8 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.CompoundButton
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.SwitchCompat
 import com.melot.android.debug.sdk.DebugManager
 import com.melot.android.debug.sdk.R
 import com.melot.android.debug.sdk.model.DebugLoginModel
@@ -36,7 +32,7 @@ class DebugActionView @JvmOverloads constructor(
     lateinit var getCurrentPage: View
     lateinit var currentPageInfo: TextView
     lateinit var quickLogin: View
-    lateinit var switchFragmentInfo: SwitchCompat
+    lateinit var switchFragmentInfo: Switch
     var config: DebugConfig? = null
     var dialog: AlertDialog? = null
     var switchFragmentCallBack: CompoundButton.OnCheckedChangeListener? = null
