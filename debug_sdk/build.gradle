@@ -55,7 +55,7 @@ artifacts {
 }
 
 jenkinsTask {
-    releaseRepositories = "http://10.0.6.34:8081/repository/jjyp_release/"
-    snapshotRepositories = "http://10.0.6.34:8081/repository/jjyp_snapshots/"
+    releaseRepositories = "http://10.4.255.180:8081/nexus/content/repositories/android-releases/"
+    snapshotRepositories = "http://10.4.255.180:8081/nexus/content/repositories/android-snapshots/"
     artifactId = 'debugSdk'
 }
