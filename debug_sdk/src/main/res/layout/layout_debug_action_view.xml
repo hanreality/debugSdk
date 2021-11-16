@@ -65,18 +65,32 @@
                     android:textSize="12dp"
                     android:visibility="gone" />
 
-                <Switch
-                    android:id="@+id/switch_compat_fragment"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:text="获取Fragment信息"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
-                    android:textColor="#ffffff"
-                    android:gravity="center"
-                    android:textSize="12dp"
-                    android:background="@drawable/debug_button_bg"/>
+                    android:background="@drawable/debug_button_bg">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:text="获取Fragment信息"
+                        android:textColor="#ffffff"
+                        android:textSize="12dp" />
+
+                    <Switch
+                        android:id="@+id/switch_compat_fragment"
+                        android:layout_width="50dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center|right"
+                        android:layout_marginRight="12dp"
+                        android:checked="false"
+                        android:textOn=""
+                        android:textOff=""
+                        android:thumb="@drawable/switch_ios_thumb"
+                        android:track="@drawable/switch_ios_track_selector" />
+                </FrameLayout>
+
 
                 <TextView
                     android:id="@+id/quick_login"

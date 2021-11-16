@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.FrameLayout
+import com.melot.android.debug.sdk.DebugManager
 import com.melot.android.debug.sdk.R
 import com.melot.android.debug.sdk.util.BitmapCreator
 import com.melot.android.debug.sdk.view.layer.AbsLayer
@@ -31,6 +32,10 @@ class DebugView constructor(
         fragmentNameLayer = FragmentNameLayer(context)
 
         debugMenuButton = findViewById(R.id.iv_debug_button)
+        val resourceId = DebugManager.INSTANCE.debugProxy?.getIcon() ?: R.drawable.debug_icon
+        if (resourceId != -1) {
+            debugMenuButton.setImageResource(resourceId)
+        }
         debugMenuButton.setOnClickListener {
             showMenu()
         }

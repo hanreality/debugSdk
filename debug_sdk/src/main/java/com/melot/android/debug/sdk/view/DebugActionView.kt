@@ -126,7 +126,7 @@ class DebugActionView @JvmOverloads constructor(
             DebugManager.INSTANCE.currentActivity as Context,
             items
         )
-        dialog = AlertDialog.Builder(DebugManager.INSTANCE.currentActivity as Context)
+        dialog = AlertDialog.Builder(DebugManager.INSTANCE.currentActivity as Context, R.style.MyDialogTheme)
             .setTitle("请选择要登陆的账号")
             .setAdapter(
                 adapter
@@ -187,7 +187,7 @@ class DebugActionView @JvmOverloads constructor(
 
         fun bindData(model: DebugLoginModel?) {
             model?.let {
-                accountId.text = model.id
+                accountId.text = model.displayName
             }
         }
 

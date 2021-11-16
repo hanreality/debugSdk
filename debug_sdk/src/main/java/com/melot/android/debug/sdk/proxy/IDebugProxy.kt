@@ -16,4 +16,6 @@ interface IDebugProxy {
     fun quickLogin(id: String, pwd: String)
 
     fun getTestAccounts() :ArrayList<DebugLoginModel>
+
+    fun getIcon(): Int
 }
