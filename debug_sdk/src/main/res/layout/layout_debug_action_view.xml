@@ -91,6 +91,32 @@
                         android:track="@drawable/switch_ios_track_selector" />
                 </FrameLayout>
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/debug_button_bg">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:text="获取PopWindow信息"
+                        android:textColor="#ffffff"
+                        android:textSize="12dp" />
+
+                    <Switch
+                        android:id="@+id/switch_compat_pop"
+                        android:layout_width="50dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center|right"
+                        android:layout_marginRight="12dp"
+                        android:checked="false"
+                        android:textOn=""
+                        android:textOff=""
+                        android:thumb="@drawable/switch_ios_thumb"
+                        android:track="@drawable/switch_ios_track_selector" />
+                </FrameLayout>
+
 
                 <TextView
                     android:id="@+id/quick_login"

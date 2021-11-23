@@ -11,6 +11,7 @@ import com.melot.android.debug.sdk.R
 import com.melot.android.debug.sdk.util.BitmapCreator
 import com.melot.android.debug.sdk.view.layer.AbsLayer
 import com.melot.android.debug.sdk.view.layer.FragmentNameLayer
+import com.melot.android.debug.sdk.view.layer.PopableNameLayer
 
 /**
  * Author: han.chen
@@ -23,6 +24,7 @@ class DebugView constructor(
     private val debugMenuButton: DebugMenuButton
     private val debugActionView: DebugActionView
     private var fragmentNameLayer: FragmentNameLayer? = null
+    private var popNameLayer: PopableNameLayer? = null
     private val canvas = Canvas()
     private var bitmap: Bitmap? = null
 
@@ -30,6 +32,7 @@ class DebugView constructor(
         View.inflate(context, R.layout.layout_debug_view, this)
 
         fragmentNameLayer = FragmentNameLayer(context)
+        popNameLayer = PopableNameLayer(context)
 
         debugMenuButton = findViewById(R.id.iv_debug_button)
         val resourceId = DebugManager.INSTANCE.debugProxy?.getIcon() ?: R.drawable.debug_icon
@@ -44,6 +47,10 @@ class DebugView constructor(
             CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
                 generateSwitch(fragmentNameLayer, isChecked)
             }
+        debugActionView.switchPopCallBack =
+            CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                generateSwitch(popNameLayer, isChecked)
+            }
     }
 
     override fun onAttachedToWindow() {
@@ -57,6 +64,7 @@ class DebugView constructor(
     private fun drawInfo(canvas: Canvas) {
         clear()
         fragmentNameLayer?.uiUpdate(canvas, rootView)
+        popNameLayer?.uiUpdate(canvas, rootView)
     }
 
     private fun clear() {

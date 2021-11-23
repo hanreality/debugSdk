@@ -10,10 +10,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import com.google.gson.reflect.TypeToken
 import com.melot.android.debug.sdk.DebugManager
 import com.melot.android.debug.sdk.R
 import com.melot.android.debug.sdk.model.DebugLoginModel
+import com.melot.android.debug.sdk.model.DebugTestAccountData
+import com.melot.android.debug.sdk.model.DebugTestAccountModel
 import com.melot.android.debug.sdk.proxy.DebugConfig
+import com.melot.android.debug.sdk.util.DebugGsonUtil
+import okhttp3.*
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLConnection
+import java.io.IOException
+
 
 /**
  * Author: han.chen
@@ -24,7 +37,7 @@ class DebugActionView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
-    val container:View
+    val container: View
     lateinit var closeView: View
     lateinit var exit: View
     lateinit var changeServer: TextView
@@ -33,9 +46,11 @@ class DebugActionView @JvmOverloads constructor(
     lateinit var currentPageInfo: TextView
     lateinit var quickLogin: View
     lateinit var switchFragmentInfo: Switch
+    lateinit var switchPopInfo: Switch
     var config: DebugConfig? = null
     var dialog: AlertDialog? = null
     var switchFragmentCallBack: CompoundButton.OnCheckedChangeListener? = null
+    var switchPopCallBack: CompoundButton.OnCheckedChangeListener? = null
 
     init {
         gravity = Gravity.CENTER
@@ -82,6 +97,11 @@ class DebugActionView @JvmOverloads constructor(
             switchFragmentCallBack?.onCheckedChanged(buttonView, isChecked)
         }
 
+        switchPopInfo = view.findViewById(R.id.switch_compat_pop)
+        switchPopInfo.setOnCheckedChangeListener { buttonView, isChecked ->
+            switchPopCallBack?.onCheckedChanged(buttonView, isChecked)
+        }
+
         quickLogin = view.findViewById(R.id.quick_login)
         quickLogin.setOnClickListener {
             showQuickDialog()
@@ -121,23 +141,51 @@ class DebugActionView @JvmOverloads constructor(
     }
 
     private fun showQuickDialog() {
-        val items = DebugManager.INSTANCE.debugProxy?.getTestAccounts()
-        val adapter = AccountAdapter(
-            DebugManager.INSTANCE.currentActivity as Context,
-            items
-        )
-        dialog = AlertDialog.Builder(DebugManager.INSTANCE.currentActivity as Context, R.style.MyDialogTheme)
-            .setTitle("请选择要登陆的账号")
-            .setAdapter(
-                adapter
-            ) { dialog, which ->
-                items?.let {
-                    dialog?.dismiss()
-                    DebugManager.INSTANCE.debugProxy?.quickLogin(it[which].id, it[which].pwd)
+        val url =
+            "http://10.0.6.34:8049/getTestAccountList?debug=" + DebugManager.INSTANCE.debugProxy?.debugConfig()?.serverDebug + "&appName=" + DebugManager.INSTANCE.debugProxy?.debugConfig()?.appName
+        val okHttpClient = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .get()
+            .build()
+        val call = okHttpClient.newCall(request);
+        call.enqueue(object :Callback {
+            override fun onFailure(call: Call, e: IOException) {
+
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseStr = response.body?.string()
+                handler?.post {
+                    val model: DebugTestAccountModel = DebugGsonUtil.GsonToBean(
+                        responseStr,
+                        object : TypeToken<DebugTestAccountModel>() {}.type
+                    )
+                    val adapter = AccountAdapter(
+                        DebugManager.INSTANCE.currentActivity as Context,
+                        model.data
+                    )
+                    dialog = AlertDialog.Builder(
+                        DebugManager.INSTANCE.currentActivity as Context,
+                        R.style.MyDialogTheme
+                    )
+                        .setTitle("请选择要登陆的账号")
+                        .setAdapter(
+                            adapter
+                        ) { dialog, which ->
+                            model.data?.let {
+                                dialog?.dismiss()
+                                DebugManager.INSTANCE.debugProxy?.quickLogin(
+                                    it[which].accountId,
+                                    it[which].password
+                                )
+                            }
+                        }
+                        .create()
+                    dialog?.show()
                 }
             }
-            .create()
-        dialog?.show()
+        })
     }
 
     fun dismiss() {
@@ -148,14 +196,14 @@ class DebugActionView @JvmOverloads constructor(
         visibility = View.VISIBLE
     }
 
-    inner class AccountAdapter(val context: Context, val items: ArrayList<DebugLoginModel>?) :
+    inner class AccountAdapter(val context: Context, val items: ArrayList<DebugTestAccountData>?) :
         BaseAdapter() {
 
         override fun getCount(): Int {
             return items?.size ?: 0
         }
 
-        override fun getItem(position: Int): DebugLoginModel? {
+        override fun getItem(position: Int): DebugTestAccountData? {
             return items?.get(position)
         }
 
@@ -185,9 +233,9 @@ class DebugActionView @JvmOverloads constructor(
 
         private val accountId: TextView = itemView.findViewById(R.id.account_id)
 
-        fun bindData(model: DebugLoginModel?) {
+        fun bindData(model: DebugTestAccountData?) {
             model?.let {
-                accountId.text = model.displayName
+                accountId.text = model.info
             }
         }
 
