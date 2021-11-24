@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_alignParentBottom="true">
+    android:clickable="false">
 
     <com.melot.android.debug.sdk.view.DebugActionView
         android:id="@+id/debug_action_view"
@@ -14,9 +14,7 @@
         android:id="@+id/iv_debug_button"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="170dp"
+        android:layout_marginTop="170dp"
         android:layout_marginLeft="16dp"
         android:src="@drawable/debug_icon" />
-
-</RelativeLayout>
+</FrameLayout>

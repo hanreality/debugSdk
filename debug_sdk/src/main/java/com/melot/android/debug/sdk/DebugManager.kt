@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.melot.android.debug.sdk.proxy.IDebugProxy
 import com.melot.android.debug.sdk.view.DebugView
+import java.lang.ref.WeakReference
 
 /**
  * Author: han.chen
@@ -26,7 +27,7 @@ class DebugManager {
             }
         }
     private lateinit var application: Application
-    var currentActivity: Activity? = null
+    var currentActivity: WeakReference<Activity>? = null
     var debugProxy: IDebugProxy? = null
 
     companion object {
@@ -53,8 +54,8 @@ class DebugManager {
         if (!enable) {
             return
         }
-        takeIf { debugView == null && activity != null }?.apply {
-            debugView = DebugView(activity!!)
+        takeIf { debugView == null && activity != null}?.apply {
+            debugView = DebugView(activity!!.applicationContext)
             debugView?.tag = debugViewTag
         }
         try {
@@ -85,31 +86,32 @@ class DebugManager {
     private fun addDebugView() {
         checkApplication()
         application.registerActivityLifecycleCallbacks(lifecycleCallbacks)
-        attachDebugView(currentActivity)
+        attachDebugView(currentActivity?.get())
     }
 
     private fun removeDebugView() {
         checkApplication()
         application.unregisterActivityLifecycleCallbacks(lifecycleCallbacks)
-        detachDebugView(currentActivity)
+        detachDebugView(currentActivity?.get())
     }
 
     private val lifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
         override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
-            currentActivity = activity
+
         }
 
         override fun onActivityStarted(activity: Activity) {
-            currentActivity = activity
+
         }
 
         override fun onActivityResumed(activity: Activity) {
-            currentActivity = activity
+            currentActivity = WeakReference(activity)
             attachDebugView(activity)
         }
 
         override fun onActivityPaused(activity: Activity) {
             detachDebugView(activity)
+            currentActivity = null
         }
 
         override fun onActivityStopped(activity: Activity) {

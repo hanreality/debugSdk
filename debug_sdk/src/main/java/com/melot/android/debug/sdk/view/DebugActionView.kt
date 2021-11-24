@@ -74,7 +74,7 @@ class DebugActionView @JvmOverloads constructor(
         currentPageInfo = view.findViewById(R.id.current_page_info)
         getCurrentPage = view.findViewById(R.id.get_current_page_info)
         getCurrentPage.setOnClickListener {
-            DebugManager.INSTANCE.currentActivity?.let { activity ->
+            DebugManager.INSTANCE.currentActivity?.get()?.let { activity ->
                 currentPageInfo.visibility = View.VISIBLE
                 val info = StringBuilder()
                     .append("Activity: ")
@@ -137,7 +137,7 @@ class DebugActionView @JvmOverloads constructor(
     }
 
     private fun switchLanguage() {
-        DebugManager.INSTANCE.currentActivity?.startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+        DebugManager.INSTANCE.currentActivity?.get()?.startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
     }
 
     private fun showQuickDialog() {
@@ -161,28 +161,30 @@ class DebugActionView @JvmOverloads constructor(
                         responseStr,
                         object : TypeToken<DebugTestAccountModel>() {}.type
                     )
-                    val adapter = AccountAdapter(
-                        DebugManager.INSTANCE.currentActivity as Context,
-                        model.data
-                    )
-                    dialog = AlertDialog.Builder(
-                        DebugManager.INSTANCE.currentActivity as Context,
-                        R.style.MyDialogTheme
-                    )
-                        .setTitle("请选择要登陆的账号")
-                        .setAdapter(
-                            adapter
-                        ) { dialog, which ->
-                            model.data?.let {
-                                dialog?.dismiss()
-                                DebugManager.INSTANCE.debugProxy?.quickLogin(
-                                    it[which].accountId,
-                                    it[which].password
-                                )
+                    DebugManager.INSTANCE.currentActivity?.get()?.let {
+                        val adapter = AccountAdapter(
+                            it, model.data
+                        )
+                        dialog = AlertDialog.Builder(
+                            it,
+                            R.style.MyDialogTheme
+                        )
+                            .setTitle("请选择要登陆的账号")
+                            .setAdapter(
+                                adapter
+                            ) { dialog, which ->
+                                model.data?.let {
+                                    dialog?.dismiss()
+                                    DebugManager.INSTANCE.debugProxy?.quickLogin(
+                                        it[which].accountId,
+                                        it[which].password
+                                    )
+                                }
                             }
-                        }
-                        .create()
-                    dialog?.show()
+                            .create()
+                        dialog?.show()
+                    }
+
                 }
             }
         })

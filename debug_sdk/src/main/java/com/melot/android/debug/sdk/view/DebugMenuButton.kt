@@ -6,12 +6,9 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.view.MotionEvent
-import android.view.WindowManager
+import android.view.*
 import androidx.appcompat.widget.AppCompatImageView
-
-
-import kotlin.math.abs
+import kotlin.math.pow
 
 
 /**
@@ -23,71 +20,84 @@ class DebugMenuButton @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
-    private var lastX: Int = 0
-    private var lastY: Int = 0
-    private var beginX: Int = 0
-    private var beginY: Int = 0
 
-    private var screenWidth: Int = 1080
-    private var screenHeight: Int = 1920
 
     private val drawPath = Path()
     private val rectF = RectF()
+    private var mLastX: Float = 0.toFloat()
+    private var mLastY: Float = 0.toFloat()
+    private var mIsDrag: Boolean? = null
+    private var mTouchSlop: Int = 0
 
     init {
-        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val dm = DisplayMetrics()
-        wm.defaultDisplay.getMetrics(dm)
-        screenWidth = dm.widthPixels
-        screenHeight = dm.heightPixels
+        mTouchSlop = ViewConfiguration.get(context).scaledTouchSlop shl 1
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        when (event?.action) {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+
+        when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                lastX = event.rawX.toInt()
-                lastY = event.rawY.toInt()
-                beginX = lastX
-                beginY = lastY
+                mIsDrag = null
+                mLastX = event.rawX
+                mLastY = event.rawY
             }
             MotionEvent.ACTION_MOVE -> {
-                val dx = event.rawX.toInt() - lastX
-                val dy = event.rawY.toInt() - lastY
-
-                var left = left + dx
-                var top = top + dy
-                var right = right + dx
-                var bottom = bottom + dy
-                if (left < 0) {
-                    left = 0
-                    right = left + width
+                val curX = event.rawX
+                val curY = event.rawY
+                if (mIsDrag == null) {
+                    if ((curX - mLastX).toDouble().pow(2.0) + Math.pow(
+                            (curY - mLastY).toDouble(),
+                            2.0
+                        ) > mTouchSlop
+                    ) {
+                        mIsDrag = true
+                        mLastX = curX
+                        mLastY = curY
+                    }
+                } else if (mIsDrag!!) {
+                    val params =
+                        layoutParams as? ViewGroup.MarginLayoutParams ?: return super.onTouchEvent(
+                            event
+                        )
+                    params.leftMargin += (curX - mLastX).toInt()
+                    params.topMargin += (curY - mLastY).toInt()
+                    requestLayout()
+                    mLastX = curX
+                    mLastY = curY
                 }
-                if (right > screenWidth) {
-                    right = screenWidth
-                    left = right - width
-                }
-                if (top < 0) {
-                    top = 0;
-                    bottom = top + height
-                }
-                if (bottom > screenHeight) {
-                    bottom = screenHeight
-                    top = bottom - height
-                }
-                layout(left, top, right, bottom)
-                lastX = event.rawX.toInt()
-                lastY = event.rawY.toInt()
             }
-            MotionEvent.ACTION_UP -> {
-                return if (abs(lastX - beginX) < 10 && abs(lastY - beginY) < 10) {
-                    super.onTouchEvent(event)
-                } else {
-                    isPressed = false
-                    true
+            MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
+                if (mIsDrag == null) {
+                    performClick()
                 }
+                moveIfNeeded()
             }
         }
-        return super.onTouchEvent(event)
+
+        return true
+    }
+
+    private fun moveIfNeeded() {
+        val params = layoutParams as? ViewGroup.MarginLayoutParams ?: return
+        if (params.leftMargin < 0) {
+            params.leftMargin = 0
+        }
+        if (params.topMargin < dp2px(30)) {
+            params.topMargin = dp2px(30)
+        }
+        if (params.leftMargin + width > (parent as View).width) {
+            params.leftMargin = (parent as View).width - width
+        }
+        if (params.topMargin + height > (parent as View).height) {
+            params.topMargin = (parent as View).height - height
+        }
+        requestLayout()
+    }
+
+
+    private fun dp2px(dip: Int): Int {
+        val density = context.resources.displayMetrics.density
+        return (dip * density + 0.5).toInt()
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -100,5 +110,4 @@ class DebugMenuButton @JvmOverloads constructor(
             e.printStackTrace()
         }
     }
-
 }
