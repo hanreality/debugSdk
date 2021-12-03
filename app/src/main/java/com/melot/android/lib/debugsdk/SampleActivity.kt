@@ -38,9 +38,10 @@ class SampleActivity : AppCompatActivity() {
 
             }
 
-            override fun getTestAccounts(): ArrayList<DebugLoginModel> {
-                return ArrayList()
+            override fun getIcon(): Int {
+                return R.mipmap.ic_launcher
             }
+
         })
         DebugManager.INSTANCE.enable = true
 
