@@ -13,6 +13,7 @@ import android.widget.PopupWindow
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.melot.android.debug.sdk.util.DevelopUtil
+import com.melot.android.debug.sdk.util.RunningActivityFetcher
 
 /**
  * Author: han.chen
@@ -45,7 +46,7 @@ class PopableNameLayer(context: Context) : AbsLayer(context) {
 
     override fun onAttached(rootView: View?) {
         super.onAttached(rootView)
-        val activity = DevelopUtil.findActivity(rootView)
+        val activity = RunningActivityFetcher.findActivity(rootView)
         if (activity is FragmentActivity) {
             mActivity = activity
         }

@@ -14,16 +14,4 @@ object DevelopUtil {
             throw NullPointerException("$what cannot be null!")
         }
     }
-
-    fun findActivity(view: View?): Activity? {
-        val references: ArrayList<WeakReference<Activity>>? = RunningActivityFetcher.fetch()
-
-        references?.forEach {
-            val activity = it.get()
-            if (view == activity?.window?.decorView?.rootView) {
-                return activity
-            }
-        }
-        return null
-    }
 }
