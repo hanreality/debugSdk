@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:background="@drawable/ms_kit_group_background"
+    android:elevation="2dp">
+
+    <TextView
+        android:id="@+id/close"
+        style="@style/MS.Text"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="退出开发工具"
+        android:textColor="#cc3a4b" />
+
+</FrameLayout>

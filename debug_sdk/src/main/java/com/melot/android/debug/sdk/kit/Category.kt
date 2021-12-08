@@ -1,4 +1,4 @@
-package com.melot.android.debug.sdk.kits
+package com.melot.android.debug.sdk.kit
 
 /**
  * Author: han.chen

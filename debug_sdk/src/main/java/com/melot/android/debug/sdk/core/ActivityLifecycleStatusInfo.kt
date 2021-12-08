@@ -5,7 +5,7 @@ package com.melot.android.debug.sdk.core
  * Time: 2021/12/3 17:43
  */
 data class ActivityLifecycleStatusInfo(
-    var isInvokeStopMethod: Boolean? = false,
+    var isInvokeStopMethod: Boolean = false,
     var lifeCycleStatus: MsKitLifeCycleStatus? = MsKitLifeCycleStatus.CREATED,
     var activityName: String? = ""
 )

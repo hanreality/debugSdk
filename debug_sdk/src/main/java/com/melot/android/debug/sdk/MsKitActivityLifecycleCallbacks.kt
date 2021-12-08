@@ -8,6 +8,9 @@ import androidx.fragment.app.FragmentManager
 import com.melot.android.debug.sdk.core.ActivityLifecycleStatusInfo
 import com.melot.android.debug.sdk.core.MsKitLifeCycleStatus
 import com.melot.android.debug.sdk.core.MsKitManager
+import com.melot.android.debug.sdk.core.MsKitViewManager
+import com.melot.android.debug.sdk.util.ActivityUtils
+import com.melot.android.debug.sdk.util.LifecycleListenerUtil
 
 /**
  * Author: han.chen
@@ -15,7 +18,6 @@ import com.melot.android.debug.sdk.core.MsKitManager
  */
 class MsKitActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
     private var startedActivityCounts = 0
-    private var sHasRequestPermission = false
     private val sFragmentLifecycleCallbacks: FragmentManager.FragmentLifecycleCallbacks =
         MsKitFragmentLifecycleCallbacks()
 
@@ -26,6 +28,7 @@ class MsKitActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
             if (ignoreCurrentActivityMsKitView(activity)) {
                 return
             }
+            ActivityUtils.onActivityCreated(activity, savedInstanceState)
             if (activity is FragmentActivity) {
                 activity.supportFragmentManager.registerFragmentLifecycleCallbacks(
                     sFragmentLifecycleCallbacks, true
@@ -42,8 +45,9 @@ class MsKitActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
             if (ignoreCurrentActivityMsKitView(activity)) {
                 return
             }
+            ActivityUtils.onActivityStarted(activity)
             if (startedActivityCounts == 0) {
-                DokitViewManager.INSTANCE.notifyForeground()
+                MsKitViewManager.INSTANCE.notifyForeground()
             }
             startedActivityCounts++
         } catch (e: Exception) {
@@ -52,23 +56,98 @@ class MsKitActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityResumed(activity: Activity) {
-        recordActivityLifeCycleStatus(activity, MsKitLifeCycleStatus.RESUME)
+
+        try {
+            recordActivityLifeCycleStatus(activity, MsKitLifeCycleStatus.RESUME)
+            //如果是leakCanary页面不进行添加
+            if (ignoreCurrentActivityMsKitView(activity)) {
+                return
+            }
+            ActivityUtils.onActivityResumed(activity)
+            dispatchOnActivityResumed(activity)
+            for (listener in LifecycleListenerUtil.LIFECYCLE_LISTENERS) {
+                listener.onActivityResumed(activity)
+            }
+        } catch (e: Exception) {
+        }
     }
 
     override fun onActivityPaused(activity: Activity) {
-
+        try {
+            if (ignoreCurrentActivityMsKitView(activity)) {
+                return
+            }
+            ActivityUtils.onActivityPaused(activity)
+            for (listener in LifecycleListenerUtil.LIFECYCLE_LISTENERS) {
+                listener.onActivityPaused(activity)
+            }
+            MsKitViewManager.INSTANCE.onActivityPaused(activity)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun onActivityStopped(activity: Activity) {
-        recordActivityLifeCycleStatus(activity, MsKitLifeCycleStatus.STOPPED)
+        try {
+            recordActivityLifeCycleStatus(activity, MsKitLifeCycleStatus.STOPPED)
+            if (ignoreCurrentActivityMsKitView(activity)) {
+                return
+            }
+            ActivityUtils.onActivityStopped(activity)
+            startedActivityCounts--
+            if (startedActivityCounts == 0) {
+                MsKitViewManager.INSTANCE.notifyBackground()
+            }
+            MsKitViewManager.INSTANCE.onActivityStopped(activity)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-
+        try {
+            if (ignoreCurrentActivityMsKitView(activity)) {
+                return
+            }
+            ActivityUtils.onActivitySaveInstanceState(activity, outState)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun onActivityDestroyed(activity: Activity) {
-        recordActivityLifeCycleStatus(activity, MsKitLifeCycleStatus.DESTROYED)
+        try {
+            recordActivityLifeCycleStatus(activity, MsKitLifeCycleStatus.DESTROYED)
+            if (ignoreCurrentActivityMsKitView(activity)) {
+                return
+            }
+            ActivityUtils.onActivityDestroyed(activity)
+            //注销fragment的生命周期回调
+            if (activity is FragmentActivity) {
+                activity.supportFragmentManager.unregisterFragmentLifecycleCallbacks(
+                    sFragmentLifecycleCallbacks
+                )
+            }
+            MsKitViewManager.INSTANCE.onActivityDestroyed(activity)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * 显示所有应该显示的dokitView
+     *
+     * @param activity
+     */
+    private fun dispatchOnActivityResumed(activity: Activity) {
+        activity.window.decorView.also {
+            it.post { MsKit.windowSize.set(it.width, it.height) }
+        }
+        if (MsKitManager.IS_NORMAL_FLOAT_MODE) {
+            //显示内置msKitView icon
+            MsKitViewManager.INSTANCE.dispatchOnActivityResumed(activity)
+            return
+        }
     }
 
     /**
@@ -119,6 +198,12 @@ class MsKitActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
          * @return
          */
         private fun ignoreCurrentActivityMsKitView(activity: Activity): Boolean {
+            val ignoreActivityClassNames = arrayOf("LeakActivity")
+            for (activityClassName in ignoreActivityClassNames) {
+                if (activity.javaClass.simpleName == activityClassName) {
+                    return true
+                }
+            }
             return false
         }
     }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="debug_tool">开发工具</string>
+    <string name="debug_category_exit">退出</string>
+    <string name="debug_category_version">version</string>
+    <string name="ms_category_common">常用工具</string>
+    <string name="ms_category_ui">视觉工具</string>
+    <string name="ms_page_info">页面信息</string>
+    <string name="ms_fragment_info">碎片信息</string>
+    <string name="ms_quick_login">快速登录</string>
+    <string name="ms_change_server_release">Release</string>
+    <string name="ms_change_server_debug">Beta</string>
+</resources>

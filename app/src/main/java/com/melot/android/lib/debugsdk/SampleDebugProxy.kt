@@ -17,7 +17,7 @@ class SampleDebugProxy :IDebugProxy {
     }
 
     override fun debugConfig(): DebugConfig? {
-        return null
+        return DebugConfig("", true, "erhai")
     }
 
     override fun quickLogin(id: String, pwd: String) {

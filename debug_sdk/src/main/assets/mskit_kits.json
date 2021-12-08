@@ -1,0 +1,37 @@
+[
+  {
+    "groupId": "ms_category_common",
+    "kits": [
+      {
+        "allClassName": "com.melot.android.debug.sdk.kit.pageinfo.PageInfoKit",
+        "checked": true,
+        "innerKitId": "mskit_sdk_common_page_info"
+      },
+      {
+        "allClassName":"com.melot.android.debug.sdk.kit.fragmentInfo.FragmentInfoKit",
+        "checked": true,
+        "innerKitId": "mskit_sdk_common_fragment_info"
+      },
+      {
+        "allClassName":"com.melot.android.debug.sdk.kit.quicklogin.QuickLoginKit",
+        "checked": true,
+        "innerKitId": "mskit_sdk_common_quick_login"
+      },
+      {
+        "allClassName":"com.melot.android.debug.sdk.kit.server.ChangeServerKit",
+        "checked": true,
+        "innerKitId": "mskit_sdk_common_change_server"
+      }
+    ]
+  },
+  {
+    "groupId": "ms_category_ui",
+    "kits": [
+      {
+        "allClassName": "",
+        "checked": true,
+        "innerKitId": "mskit_sdk_ui_ck_widget"
+      }
+    ]
+  }
+]

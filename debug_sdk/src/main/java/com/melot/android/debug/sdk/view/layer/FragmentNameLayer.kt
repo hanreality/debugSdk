@@ -10,7 +10,7 @@ import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.melot.android.debug.sdk.util.DevelopUtil
-import com.melot.android.debug.sdk.util.RunningActivityFetcher
+import com.melot.android.debug.sdk.util.ActivityUtils
 
 /**
  * Author: han.chen
@@ -37,7 +37,7 @@ class FragmentNameLayer(context: Context) : AbsLayer(context) {
 
     override fun onAttached(rootView: View?) {
         super.onAttached(rootView)
-        val activity = RunningActivityFetcher.findActivity(rootView)
+        val activity = ActivityUtils.findActivity(rootView)
         if (activity is FragmentActivity) {
             mActivity = activity
         }
@@ -72,8 +72,12 @@ class FragmentNameLayer(context: Context) : AbsLayer(context) {
                     takeIf { _fragment.isVisible && _fragment.userVisibleHint }?.apply {
                         val view = _fragment.view
                         view?.let {
+                            val locations = IntArray(2)
+                            getLocationOnScreen(locations)
                             val localSize: IntArray? = getLocationAndSize(view)
                             localSize?.let {
+                                it[0] -= locations[0]
+                                it[1] -= locations[1]
                                 canvas.drawRect(
                                     it[0].toFloat(),
                                     it[1].toFloat(),

@@ -1,7 +1,5 @@
 package com.melot.android.debug.sdk.proxy
 
-import com.melot.android.debug.sdk.model.DebugLoginModel
-
 /**
  * Author: han.chen
  * Time: 2021/9/9 17:10

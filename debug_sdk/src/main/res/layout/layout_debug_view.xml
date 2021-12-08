@@ -4,17 +4,4 @@
     android:layout_height="match_parent"
     android:clickable="false">
 
-    <com.melot.android.debug.sdk.view.DebugActionView
-        android:id="@+id/debug_action_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
-
-    <com.melot.android.debug.sdk.view.DebugMenuButton
-        android:id="@+id/iv_debug_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="170dp"
-        android:layout_marginLeft="16dp"
-        android:src="@drawable/debug_icon" />
 </FrameLayout>

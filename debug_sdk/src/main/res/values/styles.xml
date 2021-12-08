@@ -1,3 +1,46 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
+
     <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert" />
+
+    <style name="MS" />
+
+    <style name="MS.Title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#333333</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingLeft">16dp</item>
+    </style>
+
+    <style name="MS.Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="MS.TextSmall">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="MS.TextSmall.Dark" parent="MS.TextSmall">
+        <item name="android:textColor">#151515</item>
+    </style>
+
+    <style name="MS.Text.Darker" parent="MS.Text">
+        <item name="android:textColor">#333333</item>
+    </style>
+
+    <style name="MS.CheckBox">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/ms_switch_background</item>
+    </style>
+
 </resources>
