@@ -28,9 +28,9 @@
     "groupId": "ms_category_ui",
     "kits": [
       {
-        "allClassName": "",
+        "allClassName": "com.melot.android.debug.sdk.kit.viewcheck.ViewCheckerKit",
         "checked": true,
-        "innerKitId": "mskit_sdk_ui_ck_widget"
+        "innerKitId": "mskit_sdk_ui_view_checker"
       }
     ]
   }

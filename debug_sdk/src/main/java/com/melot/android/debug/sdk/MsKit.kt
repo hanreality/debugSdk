@@ -1,5 +1,6 @@
 package com.melot.android.debug.sdk
 
+import android.app.Activity
 import android.app.Application
 import android.graphics.Point
 import android.os.Bundle
@@ -91,6 +92,14 @@ object MsKit {
     @JvmStatic
     fun removeFloating(targetClass: Class<out AbsMsKitView>) {
         SimpleMsKitLauncher.removeFloating(targetClass)
+    }
+
+    @JvmStatic
+    fun <T : AbsMsKitView> getMsKitView(
+        activity: Activity?,
+        clazz: Class<out T>
+    ): T? {
+        return MsKitViewManager.INSTANCE.getMsKitView(activity, clazz) as? T
     }
 
     fun install(app: Application, debugProxy: IDebugProxy?) {

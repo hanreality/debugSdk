@@ -7,11 +7,16 @@ import android.content.res.Resources
 import android.graphics.Point
 import android.os.Build
 import android.provider.Settings
-import android.util.DisplayMetrics
+import android.text.TextUtils
+import android.util.TypedValue
 import android.view.*
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import androidx.annotation.AnyRes
 import com.melot.android.debug.sdk.MsKit
+import com.melot.android.debug.sdk.R
 import java.lang.Exception
-import java.lang.ref.WeakReference
+import java.lang.StringBuilder
 
 /**
  * Author: han.chen
@@ -78,13 +83,43 @@ object DevelopUtil {
     /**
      * Return whether the status bar is visible.
      *
-     * @param activity The activity.
+     * @param context The Context.
      * @return `true`: yes<br></br>`false`: no
      */
     @JvmStatic
-    fun isStatusBarVisible(activity: Activity): Boolean {
-        val flags = activity.window.attributes.flags
-        return flags and WindowManager.LayoutParams.FLAG_FULLSCREEN == 0
+    fun isStatusBarVisible(context: Context?): Boolean {
+        return !(checkFullScreenByTheme(context) || checkFullScreenByCode(context) || checkFullScreenByCode2(context))
+    }
+
+    private fun checkFullScreenByTheme(context: Context?) :Boolean {
+        val theme = context?.theme
+        if (theme != null) {
+            val typedValue = TypedValue()
+            val result = theme.resolveAttribute(android.R.attr.windowFullscreen, typedValue, false)
+            if (result) {
+                typedValue.coerceToString()
+                if (typedValue.type == TypedValue.TYPE_INT_BOOLEAN) {
+                    return typedValue.data != 0
+                }
+            }
+        }
+        return false
+    }
+
+    private fun checkFullScreenByCode(context: Context?): Boolean {
+        if (context is Activity) {
+            val window = context.window
+            if (window != null) {
+                val decorView = window.decorView
+                return decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_FULLSCREEN == View.SYSTEM_UI_FLAG_FULLSCREEN
+            }
+        }
+        return false
+    }
+    private fun checkFullScreenByCode2(context: Context?): Boolean {
+        return if (context is Activity) {
+            context.window.attributes.flags and WindowManager.LayoutParams.FLAG_FULLSCREEN == WindowManager.LayoutParams.FLAG_FULLSCREEN
+        } else false
     }
 
     /**
@@ -194,5 +229,67 @@ object DevelopUtil {
         } else {
             0
         }
+    }
+
+    /**
+     * 获得app的contentView
+     *
+     * @param activity
+     * @return
+     */
+    fun getMsKitAppContentView(activity: Activity?): View? {
+        val decorView = activity?.window?.decorView as? FrameLayout
+        var mAppContentView = decorView?.getTag(R.id.msKit_app_contentview_id) as? View
+        if (mAppContentView != null) {
+            return mAppContentView
+        }
+        for (index in 0 until (decorView?.childCount ?: 0)) {
+            val child = decorView?.getChildAt(index)
+            if (child is LinearLayout && TextUtils.isEmpty(getIdText(child)?.trim { it <= ' ' }) || child is FrameLayout) {
+                mAppContentView = child
+                mAppContentView.tag = R.id.msKit_app_contentview_id
+                break
+            }
+        }
+        return mAppContentView
+    }
+
+    /**
+     * 要特别注意 返回的字段包含空格  做判断时一定要trim()
+     *
+     * @param view
+     * @return
+     */
+    @JvmStatic
+    fun getIdText(view: View): String {
+        val id = view.id
+        val out = StringBuilder()
+        if (id != View.NO_ID) {
+            val r = view.resources
+            if (id > 0 && resourceHasPackage(id) && r != null) {
+                try {
+                    val pkgname: String = when (id and -0x1000000) {
+                        0x7f000000 -> "app"
+                        0x01000000 -> "android"
+                        else -> r.getResourcePackageName(id)
+                    }
+                    val typename = r.getResourceTypeName(id)
+                    val entryName = r.getResourceEntryName(id)
+                    out.append(" ")
+                    out.append(pkgname)
+                    out.append(":")
+                    out.append(typename)
+                    out.append("/")
+                    out.append(entryName)
+                } catch (e: Resources.NotFoundException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        return if (TextUtils.isEmpty(out.toString())) "" else out.toString()
+    }
+
+    private fun resourceHasPackage(@AnyRes resid: Int): Boolean {
+        return resid ushr 24 != 0
     }
 }

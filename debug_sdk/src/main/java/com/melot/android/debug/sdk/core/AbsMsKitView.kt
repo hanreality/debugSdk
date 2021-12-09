@@ -749,6 +749,19 @@ abstract class AbsMsKitView : MsKitView, MsKitViewManager.MsKitViewAttachedListe
     }
 
     /**
+     * 设置当前 kitView 不响应触摸事件
+     * 控件默认响应触摸事件
+     * 需要在子 view 的 onViewCreated 中调用
+     */
+    fun setMsKitViewNotResponseTouchEvent(view: View?) {
+        if (isNormalMode) {
+            view?.setOnTouchListener { _, _ -> false }
+        } else {
+            view?.setOnTouchListener(null)
+        }
+    }
+
+    /**
      * 获取屏幕短边的长度 不包含statusBar
      *
      * @return
