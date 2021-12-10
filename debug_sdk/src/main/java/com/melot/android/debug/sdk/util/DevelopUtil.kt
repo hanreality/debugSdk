@@ -239,15 +239,14 @@ object DevelopUtil {
      */
     fun getMsKitAppContentView(activity: Activity?): View? {
         val decorView = activity?.window?.decorView as? FrameLayout
-        var mAppContentView = decorView?.getTag(R.id.msKit_app_contentview_id) as? View
+        var mAppContentView = decorView?.findViewById(android.R.id.content) as? View
         if (mAppContentView != null) {
             return mAppContentView
         }
         for (index in 0 until (decorView?.childCount ?: 0)) {
             val child = decorView?.getChildAt(index)
-            if (child is LinearLayout && TextUtils.isEmpty(getIdText(child)?.trim { it <= ' ' }) || child is FrameLayout) {
+            if (child is LinearLayout && TextUtils.isEmpty(getIdText(child).trim { it <= ' ' }) || child is FrameLayout) {
                 mAppContentView = child
-                mAppContentView.tag = R.id.msKit_app_contentview_id
                 break
             }
         }

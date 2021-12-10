@@ -119,7 +119,7 @@ class ViewCheckMsKitView : AbsMsKitView(), LifecycleListenerUtil.LifecycleListen
         val y: Int
         if (isNormalMode) {
             x = normalLayoutParams!!.leftMargin + msKitView!!.width / 2
-            y = normalLayoutParams!!.topMargin + msKitView!!.height / 2
+            y = normalLayoutParams!!.topMargin + msKitView!!.height / 2 + if (DevelopUtil.isStatusBarVisible(activity)) DevelopUtil.getStatusBarHeight() else 0
         } else {
             x = systemLayoutParams!!.x + msKitView!!.getWidth() / 2
             y = systemLayoutParams!!.y + msKitView!!.getHeight() / 2
