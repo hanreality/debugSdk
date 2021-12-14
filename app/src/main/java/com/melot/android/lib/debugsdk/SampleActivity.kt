@@ -3,8 +3,12 @@ package com.melot.android.lib.debugsdk
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.PopupWindow
 import androidx.appcompat.app.AlertDialog
+import com.melot.android.debug.sdk.util.DevelopUtil
 
 class SampleActivity : AppCompatActivity() {
 
@@ -24,6 +28,17 @@ class SampleActivity : AppCompatActivity() {
                 .setMessage("我是弹窗内容")
                 .create()
             alertDialog.show()
+        }
+
+        findViewById<View>(R.id.popup).setOnClickListener {
+
+            val popupWindow = PopupWindow(
+                LayoutInflater.from(this).inflate(R.layout.popupwindow_layout, null),
+                DevelopUtil.dp2px(200f),
+                DevelopUtil.dp2px(60f)
+            )
+            popupWindow.isOutsideTouchable = true
+            popupWindow.showAtLocation(findViewById<View>(R.id.alert), Gravity.CENTER_HORIZONTAL, 0, 0)
         }
 
         supportFragmentManager

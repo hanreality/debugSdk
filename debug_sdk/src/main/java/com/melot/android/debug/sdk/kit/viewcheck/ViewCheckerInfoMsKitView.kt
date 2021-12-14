@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
-import android.view.Window
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.melot.android.debug.sdk.MsKit
@@ -81,7 +80,7 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
     }
 
     private fun initViewPicker() {
-        val viewList = DevelopUtil.getPhoneWindow()
+        val viewList = DevelopUtil.getWindowDecorViews()
         context?.let {
             spinnerAdapter =
                 ArrayAdapter(it, R.layout.ms_spinner_dropdown_item, viewList)
@@ -95,7 +94,7 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
                     position: Int,
                     id: Long
                 ) {
-                    val decorView = viewList[position].window.decorView
+                    val decorView = viewList[position].decorView
                     MsKit.getMsKitView(activity, ViewCheckMsKitView::class.java)
                         ?.setSelectedDecorView(decorView)
                 }
@@ -192,7 +191,7 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
                 msKitView?.preformPreCheckView()
             }
             mViewPickerRefresh-> {
-                val viewList = DevelopUtil.getPhoneWindow()
+                val viewList = DevelopUtil.getWindowDecorViews()
                 spinnerAdapter?.clear()
                 spinnerAdapter?.addAll(viewList)
                 spinnerAdapter?.notifyDataSetChanged()

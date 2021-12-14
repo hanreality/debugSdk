@@ -261,7 +261,7 @@ object DevelopUtil {
     }
 
     @JvmStatic
-    fun getPhoneWindow(): ArrayList<ViewWindow> {
+    fun getWindowDecorViews(): ArrayList<ViewWindow> {
         val decorViewList = ArrayList<ViewWindow>()
         try {
             val clazz = Class.forName("android.view.WindowManagerGlobal")
@@ -270,10 +270,9 @@ object DevelopUtil {
             val mGlobal: Any = instanceMethod.invoke(null)
             mViewsField.isAccessible = true
             val mViews = mViewsField.get(mGlobal)
-            (mViews as? List<*>)?.forEach { views ->
-                val decorView = getPhoneWindowReflect(views)
-                decorView?.let {
-                    decorViewList.add(ViewWindow(it))
+            (mViews as? List<*>)?.forEach { view ->
+                if (filterDecorView(view)) {
+                    decorViewList.add(ViewWindow(view as View))
                 }
             }
         } catch (e: Exception) {
@@ -282,20 +281,9 @@ object DevelopUtil {
         return decorViewList
     }
 
-    private fun getPhoneWindowReflect(decorView: Any?): Window? {
-        if (TextUtils.equals(decorView?.javaClass?.name, "com.android.internal.policy.DecorView")
-            || TextUtils.equals(decorView?.javaClass?.name, "android.widget.PopupWindow\$PopupDecorView")) {
-            val reflect = try {
-                val mWindowField: Field? = decorView?.javaClass?.getDeclaredField("mWindow")
-                mWindowField?.isAccessible = true
-                mWindowField?.get(decorView)
-            } catch (e: NoSuchFieldException) {
-                e.printStackTrace()
-                null
-            }
-            return reflect as? Window
-        }
-        return null
+    private fun filterDecorView(decorView: Any?): Boolean {
+        return TextUtils.equals(decorView?.javaClass?.name, "com.android.internal.policy.DecorView")
+            || TextUtils.equals(decorView?.javaClass?.name, "android.widget.PopupWindow\$PopupDecorView")
     }
 
     /**
