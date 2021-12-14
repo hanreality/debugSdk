@@ -283,7 +283,8 @@ object DevelopUtil {
     }
 
     private fun getPhoneWindowReflect(decorView: Any?): Window? {
-        if (TextUtils.equals(decorView?.javaClass?.name, "com.android.internal.policy.DecorView")) {
+        if (TextUtils.equals(decorView?.javaClass?.name, "com.android.internal.policy.DecorView")
+            || TextUtils.equals(decorView?.javaClass?.name, "android.widget.PopupWindow\$PopupDecorView")) {
             val reflect = try {
                 val mWindowField: Field? = decorView?.javaClass?.getDeclaredField("mWindow")
                 mWindowField?.isAccessible = true
