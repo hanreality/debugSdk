@@ -17,6 +17,7 @@ class ToolPanelAdapter(var context: Context?, var kitViews: MutableList<KitWrapI
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<KitWrapItem> {
         return when (viewType) {
             KitWrapItem.TYPE_EXIT -> ToolPanelExitViewHolder(context, parent)
+            KitWrapItem.TYPE_MODE -> ToolPanelModeViewHolder(context, parent)
             KitWrapItem.TYPE_TITLE -> ToolPanelTitleViewHolder(context, parent)
             KitWrapItem.TYPE_KIT -> ToolPanelKitViewHolder(context, parent)
             else -> ToolPanelTitleViewHolder(context, parent)

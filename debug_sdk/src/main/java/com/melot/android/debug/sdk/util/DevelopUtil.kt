@@ -14,9 +14,12 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.AnyRes
 import com.melot.android.debug.sdk.MsKit
-import com.melot.android.debug.sdk.R
+import com.melot.android.debug.sdk.model.ViewWindow
 import java.lang.Exception
 import java.lang.StringBuilder
+import java.lang.reflect.Field
+import java.lang.reflect.Method
+import kotlin.collections.ArrayList
 
 /**
  * Author: han.chen
@@ -88,10 +91,12 @@ object DevelopUtil {
      */
     @JvmStatic
     fun isStatusBarVisible(context: Context?): Boolean {
-        return !(checkFullScreenByTheme(context) || checkFullScreenByCode(context) || checkFullScreenByCode2(context))
+        return !(checkFullScreenByTheme(context) || checkFullScreenByCode(context) || checkFullScreenByCode2(
+            context
+        ))
     }
 
-    private fun checkFullScreenByTheme(context: Context?) :Boolean {
+    private fun checkFullScreenByTheme(context: Context?): Boolean {
         val theme = context?.theme
         if (theme != null) {
             val typedValue = TypedValue()
@@ -116,6 +121,7 @@ object DevelopUtil {
         }
         return false
     }
+
     private fun checkFullScreenByCode2(context: Context?): Boolean {
         return if (context is Activity) {
             context.window.attributes.flags and WindowManager.LayoutParams.FLAG_FULLSCREEN == WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -237,6 +243,7 @@ object DevelopUtil {
      * @param activity
      * @return
      */
+    @JvmStatic
     fun getMsKitAppContentView(activity: Activity?): View? {
         val decorView = activity?.window?.decorView as? FrameLayout
         var mAppContentView = decorView?.findViewById(android.R.id.content) as? View
@@ -251,6 +258,43 @@ object DevelopUtil {
             }
         }
         return mAppContentView
+    }
+
+    @JvmStatic
+    fun getPhoneWindow(): ArrayList<ViewWindow> {
+        val decorViewList = ArrayList<ViewWindow>()
+        try {
+            val clazz = Class.forName("android.view.WindowManagerGlobal")
+            val mViewsField: Field = clazz.getDeclaredField("mViews")
+            val instanceMethod: Method = clazz.getMethod("getInstance")
+            val mGlobal: Any = instanceMethod.invoke(null)
+            mViewsField.isAccessible = true
+            val mViews = mViewsField.get(mGlobal)
+            (mViews as? List<*>)?.forEach { views ->
+                val decorView = getPhoneWindowReflect(views)
+                decorView?.let {
+                    decorViewList.add(ViewWindow(it))
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return decorViewList
+    }
+
+    private fun getPhoneWindowReflect(decorView: Any?): Window? {
+        if (TextUtils.equals(decorView?.javaClass?.name, "com.android.internal.policy.DecorView")) {
+            val reflect = try {
+                val mWindowField: Field? = decorView?.javaClass?.getDeclaredField("mWindow")
+                mWindowField?.isAccessible = true
+                mWindowField?.get(decorView)
+            } catch (e: NoSuchFieldException) {
+                e.printStackTrace()
+                null
+            }
+            return reflect as? Window
+        }
+        return null
     }
 
     /**

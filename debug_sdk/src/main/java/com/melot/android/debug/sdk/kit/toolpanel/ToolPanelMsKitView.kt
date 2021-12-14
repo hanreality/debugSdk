@@ -118,6 +118,9 @@ class ToolPanelMsKitView : AbsMsKitView() {
                 MsKit.requireApp().getString(R.string.debug_category_exit) -> {
                     mKits.add(KitWrapItem(KitWrapItem.TYPE_EXIT, name = group.key, kit = null))
                 }
+                MsKit.requireApp().getString(R.string.debug_category_mode) -> {
+                    mKits.add(KitWrapItem(KitWrapItem.TYPE_MODE, name = group.key, kit = null))
+                }
                 MsKitManager.GROUP_ID_COMMON,
                 MsKitManager.GROUP_ID_UI -> {
                     if (group.value.size != 0) {

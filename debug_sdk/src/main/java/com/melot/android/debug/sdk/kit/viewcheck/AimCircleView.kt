@@ -54,4 +54,5 @@ class AimCircleView @JvmOverloads constructor(
         mPaint.alpha = 100
         canvas?.drawCircle(cx, cy, radius - 2, mPaint)
     }
+
 }

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 
 class SampleActivity : AppCompatActivity() {
 
@@ -15,6 +16,14 @@ class SampleActivity : AppCompatActivity() {
             val intent = Intent(this, TargetActivity::class.java)
             intent.putExtra("hell0", 1233)
             startActivity(intent)
+        }
+
+        findViewById<View>(R.id.alert).setOnClickListener {
+            val alertDialog = AlertDialog.Builder(this)
+                .setTitle("我是弹窗标题")
+                .setMessage("我是弹窗内容")
+                .create()
+            alertDialog.show()
         }
 
         supportFragmentManager

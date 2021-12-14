@@ -21,7 +21,13 @@
         "allClassName":"com.melot.android.debug.sdk.kit.server.ChangeServerKit",
         "checked": true,
         "innerKitId": "mskit_sdk_common_change_server"
+      },
+      {
+        "allClassName":"com.melot.android.debug.sdk.kit.sysinfo.DevelopmentPageKit",
+        "checked": true,
+        "innerKitId": "mskit_sdk_common_ck_devpage"
       }
+
     ]
   },
   {

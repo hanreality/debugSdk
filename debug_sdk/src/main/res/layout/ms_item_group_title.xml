@@ -13,6 +13,7 @@
     <TextView
         android:id="@+id/tv_title_name"
         style="@style/MS.Title"
+        android:paddingLeft="16dp"
         android:singleLine="true"
         tools:text="@tools:sample/full_names" />
 

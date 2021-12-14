@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="debug_tool">开发工具</string>
+    <string name="debug_category_mode">悬浮窗模式</string>
     <string name="debug_category_exit">退出</string>
     <string name="debug_category_version">version</string>
     <string name="ms_category_common">常用工具</string>
@@ -8,18 +9,29 @@
     <string name="ms_page_info">页面信息</string>
     <string name="ms_fragment_info">碎片信息</string>
     <string name="ms_quick_login">快速登录</string>
+    <string name="ms_development">开发者选项</string>
     <string name="ms_change_server_release">Release</string>
     <string name="ms_change_server_debug">Beta</string>
     <string name="ms_view_checker">控件检查</string>
+    <string name="ms_kit_mode_desc">悬浮窗模式:
+        \n
+        1）系统代表系统悬浮窗(需要系统权限)
+        \n
+        2）常规代表内置浮标(不需要系统权限)
+    </string>
+    <string name="ms_kit_mode_rb_system">系统</string>
+    <string name="ms_kit_mode_rb_normal">常规</string>
+    <string name="ms_float_permission_toast">需要打开悬浮窗权限才能正常使用</string>
 
-    <string name="dk_view_check_info_class">控件类型：%1$s</string>
-    <string name="dk_view_check_info_id">控件ID：%1$s</string>
-    <string name="dk_view_check_info_size">控件尺寸：宽%1$d，高%2$d</string>
-    <string name="dk_view_check_info_desc">背景颜色：%1$s</string>
-    <string name="dk_view_check_info_padding">内边距：%1$d, %2$d, %3$d, %4$d</string>
-    <string name="dk_view_check_info_margin">外边距：%1$d, %2$d, %3$d, %4$d</string>
-    <string name="dk_view_check_info_text_color">文字颜色：%1$s</string>
-    <string name="dk_view_check_info_text_size">文字大小：%1$d</string>
-    <string name="dk_view_check_info_activity">当前Activity：%1$s</string>
-    <string name="dk_view_check_info_fragment">可见Fragments：%1$s</string>
+    <string name="ms_view_check_info_class">控件类型：%1$s</string>
+    <string name="ms_view_check_info_id">控件ID：%1$s</string>
+    <string name="ms_view_check_info_size">控件尺寸：宽%1$dpx，高%2$dpx</string>
+    <string name="ms_view_check_info_desc">背景颜色：%1$s</string>
+    <string name="ms_view_check_info_padding">内边距：%1$dpx, %2$dpx, %3$dpx, %4$dpx</string>
+    <string name="ms_view_check_info_margin">外边距：%1$dpx, %2$dpx, %3$dpx, %4$dpx</string>
+    <string name="ms_view_check_info_text_color">文字颜色：%1$s</string>
+    <string name="ms_view_check_info_text_size">文字大小：%1$dpx</string>
+    <string name="ms_view_check_info_activity">当前Activity：%1$s</string>
+    <string name="ms_view_check_info_fragment">可见Fragments：%1$s</string>
+    <string name="debug_window_label">窗口：</string>
 </resources>

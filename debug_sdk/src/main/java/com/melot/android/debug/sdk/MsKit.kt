@@ -5,6 +5,7 @@ import android.app.Application
 import android.graphics.Point
 import android.os.Bundle
 import com.google.gson.reflect.TypeToken
+import com.melot.android.debug.sdk.constant.SharedPrefsKey
 import com.melot.android.debug.sdk.core.*
 import com.melot.android.debug.sdk.core.MsKitViewManager
 import com.melot.android.debug.sdk.core.SimpleMsKitLauncher
@@ -15,6 +16,7 @@ import com.melot.android.debug.sdk.kit.toolpanel.KitWrapItem
 import com.melot.android.debug.sdk.proxy.IDebugProxy
 import com.melot.android.debug.sdk.util.ActivityUtils
 import com.melot.android.debug.sdk.util.DebugGsonUtil
+import com.melot.android.debug.sdk.util.MMKVUtil
 import com.melot.android.debug.sdk.util.MsKitSystemUtil
 
 import kotlinx.coroutines.launch
@@ -105,6 +107,8 @@ object MsKit {
     fun install(app: Application, debugProxy: IDebugProxy?) {
         this.app = app
         this.debugProxy = debugProxy
+        val strMsKitMode = MMKVUtil.getString(SharedPrefsKey.FLOAT_START_MODE, "normal")
+        MsKitManager.IS_NORMAL_FLOAT_MODE = strMsKitMode == "normal"
         app.registerActivityLifecycleCallbacks(MsKitActivityLifecycleCallbacks())
         MsKitManager.GLOBAL_KITS.clear()
         doKitGlobalScope.launch {
@@ -141,6 +145,9 @@ object MsKit {
                 }
             }
         }
+        //悬浮窗模式
+        MsKitManager.GLOBAL_KITS[app.getString(R.string.debug_category_mode)] =
+            mutableListOf()
         //添加退出项
         MsKitManager.GLOBAL_KITS[app.getString(R.string.debug_category_exit)] =
             mutableListOf()

@@ -27,6 +27,7 @@ class ViewCheckMsKitView : AbsMsKitView(), LifecycleListenerUtil.LifecycleListen
     private lateinit var mTraverHandler: Handler
     private var mResumedActivity: Activity? = null
     private val mViewSelectListeners: ArrayList<OnViewSelectListener> = ArrayList()
+    private var selectedDecorView: View? = null
 
 
     override fun onCreate(context: Context) {
@@ -82,7 +83,10 @@ class ViewCheckMsKitView : AbsMsKitView(), LifecycleListenerUtil.LifecycleListen
 
     }
 
-
+    fun setSelectedDecorView(decorView: View) {
+        this.selectedDecorView = decorView
+        preformFindCheckView()
+    }
 
     fun setViewSelectListener(viewSelectListener: OnViewSelectListener?) {
         viewSelectListener?.let {
@@ -101,15 +105,15 @@ class ViewCheckMsKitView : AbsMsKitView(), LifecycleListenerUtil.LifecycleListen
     fun preformPreCheckView() {
         mFindCheckViewRunnable.mIndex--
         if (mFindCheckViewRunnable.mIndex < 0) {
-            mFindCheckViewRunnable.mIndex += mFindCheckViewRunnable.mCheckViewList!!.size
+            mFindCheckViewRunnable.mIndex += mFindCheckViewRunnable.mCheckViewList.size
         }
         mFindCheckViewRunnable.dispatchOnViewSelected()
     }
 
     fun preformNextCheckView() {
         mFindCheckViewRunnable.mIndex++
-        if (mFindCheckViewRunnable.mIndex >= mFindCheckViewRunnable.mCheckViewList!!.size) {
-            mFindCheckViewRunnable.mIndex -= mFindCheckViewRunnable.mCheckViewList!!.size
+        if (mFindCheckViewRunnable.mIndex >= mFindCheckViewRunnable.mCheckViewList.size) {
+            mFindCheckViewRunnable.mIndex -= mFindCheckViewRunnable.mCheckViewList.size
         }
         mFindCheckViewRunnable.dispatchOnViewSelected()
     }
@@ -121,8 +125,8 @@ class ViewCheckMsKitView : AbsMsKitView(), LifecycleListenerUtil.LifecycleListen
             x = normalLayoutParams!!.leftMargin + msKitView!!.width / 2
             y = normalLayoutParams!!.topMargin + msKitView!!.height / 2 + if (DevelopUtil.isStatusBarVisible(activity)) DevelopUtil.getStatusBarHeight() else 0
         } else {
-            x = systemLayoutParams!!.x + msKitView!!.getWidth() / 2
-            y = systemLayoutParams!!.y + msKitView!!.getHeight() / 2
+            x = systemLayoutParams!!.x + msKitView!!.width / 2
+            y = systemLayoutParams!!.y + msKitView!!.height / 2 + if (DevelopUtil.isStatusBarVisible(activity)) DevelopUtil.getStatusBarHeight() else 0
         }
         mTraverHandler.removeCallbacks(mFindCheckViewRunnable)
         mFindCheckViewRunnable.mX = x
@@ -135,7 +139,7 @@ class ViewCheckMsKitView : AbsMsKitView(), LifecycleListenerUtil.LifecycleListen
             return
         }
         val location = IntArray(2)
-        view.getLocationInWindow(location)
+        view.getLocationOnScreen(location)
         val left = location[0]
         val top = location[1]
         val right = left + view.width
@@ -185,7 +189,7 @@ class ViewCheckMsKitView : AbsMsKitView(), LifecycleListenerUtil.LifecycleListen
                         mY
                     )
                 } else {
-                    traverseViews(viewList, mResumedActivity?.window?.decorView, mX, mY)
+                    traverseViews(viewList, selectedDecorView, mX, mY)
                 }
             }
             mIndex = 0
@@ -203,5 +207,9 @@ class ViewCheckMsKitView : AbsMsKitView(), LifecycleListenerUtil.LifecycleListen
                 null
             } else mCheckViewList[mIndex]
         }
+    }
+
+    override fun restrictBorderline(): Boolean {
+        return false
     }
 }

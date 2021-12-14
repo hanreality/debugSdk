@@ -2,7 +2,9 @@ package com.melot.android.debug.sdk
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.melot.android.debug.sdk.core.ActivityLifecycleStatusInfo
@@ -11,6 +13,7 @@ import com.melot.android.debug.sdk.core.MsKitManager
 import com.melot.android.debug.sdk.core.MsKitViewManager
 import com.melot.android.debug.sdk.util.ActivityUtils
 import com.melot.android.debug.sdk.util.LifecycleListenerUtil
+import com.melot.android.debug.sdk.util.MsKitPermissionUtil
 
 /**
  * Author: han.chen
@@ -18,6 +21,7 @@ import com.melot.android.debug.sdk.util.LifecycleListenerUtil
  */
 class MsKitActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
     private var startedActivityCounts = 0
+    private var sHasRequestPermission = false
     private val sFragmentLifecycleCallbacks: FragmentManager.FragmentLifecycleCallbacks =
         MsKitFragmentLifecycleCallbacks()
 
@@ -147,6 +151,31 @@ class MsKitActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
             //显示内置msKitView icon
             MsKitViewManager.INSTANCE.dispatchOnActivityResumed(activity)
             return
+        }
+        //悬浮窗权限 vivo 华为可以不需要动态权限 小米需要
+        if (MsKitPermissionUtil.canDrawOverlays(activity)) {
+            MsKitViewManager.INSTANCE.dispatchOnActivityResumed(activity)
+        } else {
+            //请求悬浮窗权限
+            requestPermission(activity)
+        }
+    }
+
+    /**
+     * 请求悬浮窗权限
+     *
+     * @param context
+     */
+    private fun requestPermission(context: Context) {
+        if (!MsKitPermissionUtil.canDrawOverlays(context) && !sHasRequestPermission) {
+            Toast.makeText(
+                context,
+                context.getText(R.string.ms_float_permission_toast),
+                Toast.LENGTH_SHORT
+            ).show()
+            //请求悬浮窗权限
+            MsKitPermissionUtil.requestDrawOverlays(context)
+            sHasRequestPermission = true
         }
     }
 

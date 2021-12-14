@@ -9,14 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.Window
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.melot.android.debug.sdk.MsKit
 import com.melot.android.debug.sdk.R
 import com.melot.android.debug.sdk.core.AbsMsKitView
 import com.melot.android.debug.sdk.core.MsKitViewLayoutParams
+import com.melot.android.debug.sdk.model.ViewWindow
 import com.melot.android.debug.sdk.util.ActivityUtils
 import com.melot.android.debug.sdk.util.ColorUtil
 import com.melot.android.debug.sdk.util.DevelopUtil
@@ -39,6 +39,10 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
     private var mPre: ImageView? = null
     private var mNext: ImageView? = null
     private var mClose: ImageView? = null
+
+    private var mViewPicker: Spinner? = null
+    private var mViewPickerRefresh: ImageView? = null
+    private var spinnerAdapter: ArrayAdapter<ViewWindow>? = null
 
     override fun onCreate(context: Context) {
 
@@ -66,9 +70,42 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
         mPre?.setOnClickListener(this)
         mNext = findViewById(R.id.next)
         mNext?.setOnClickListener(this)
+        mViewPicker = findViewById(R.id.view_picker)
+        mViewPickerRefresh = findViewById(R.id.view_picker_refresh)
+        mViewPickerRefresh?.setOnClickListener(this)
+        initViewPicker()
         postDelayed(Runnable {
-            MsKit.getMsKitView(activity, ViewCheckMsKitView::class.java)?.setViewSelectListener(this)
+            MsKit.getMsKitView(activity, ViewCheckMsKitView::class.java)
+                ?.setViewSelectListener(this)
         }, 200)
+    }
+
+    private fun initViewPicker() {
+        val viewList = DevelopUtil.getPhoneWindow()
+        context?.let {
+            spinnerAdapter =
+                ArrayAdapter(it, R.layout.ms_spinner_dropdown_item, viewList)
+            spinnerAdapter?.setDropDownViewResource(R.layout.ms_spinner_dropdown_item_view)
+            mViewPicker?.dropDownVerticalOffset = DevelopUtil.dp2px(24f)
+            mViewPicker?.adapter = spinnerAdapter
+            mViewPicker?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val decorView = viewList[position].window.decorView
+                    MsKit.getMsKitView(activity, ViewCheckMsKitView::class.java)
+                        ?.setSelectedDecorView(decorView)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+            }
+            mViewPicker?.setSelection(0)
+        }
     }
 
     override fun initMsKitViewLayoutParams(params: MsKitViewLayoutParams) {
@@ -91,51 +128,45 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
         mNext?.visibility = if (checkViewList.size > 1) View.VISIBLE else View.GONE
         mPre?.visibility = if (checkViewList.size > 1) View.VISIBLE else View.GONE
         if (current == null) {
-            mName?.text = ""
-            mId?.text = ""
-            mPosition?.text = ""
-            mDesc?.text = ""
+            setTextAndVisible(mName, "")
+            setTextAndVisible(mId, "")
+            setTextAndVisible(mPosition, "")
+            setTextAndVisible(mDesc, "")
         } else {
-            mName?.text = resources?.getString(
-                R.string.dk_view_check_info_class,
-                current.javaClass.canonicalName
-            )
-            val idText =
-                resources?.getString(R.string.dk_view_check_info_id, DevelopUtil.getIdText(current))
-            mId?.text = idText
-            val positionText = resources?.getString(
-                R.string.dk_view_check_info_size,
-                current.width,
-                current.height
-            )
-            mPosition?.text = positionText
-            val descText: String = getViewExtraInfo(current)
-            if (TextUtils.isEmpty(descText)) {
-                mDesc?.visibility = View.GONE
-            } else {
-                mDesc?.text = descText
-                mDesc?.visibility = View.VISIBLE
-            }
-            val activity: Activity? = ActivityUtils.getTopActivity()
-            if (activity != null) {
-                val activityText = activity.javaClass.simpleName
-                setTextAndVisible(
-                    mActivityInfo,
-                    resources?.getString(R.string.dk_view_check_info_activity, activityText)
+            setTextAndVisible(
+                mName, resources?.getString(
+                    R.string.ms_view_check_info_class,
+                    current.javaClass.canonicalName
                 )
-                val fragmentText: String? = getVisibleFragment(activity)
-                if (!TextUtils.isEmpty(fragmentText)) {
-                    setTextAndVisible(
-                        mFragmentInfo,
-                        resources?.getString(R.string.dk_view_check_info_fragment, fragmentText)
-                    )
-                } else {
-                    setTextAndVisible(mFragmentInfo, "")
-                }
-            } else {
-                setTextAndVisible(mActivityInfo, "")
-                setTextAndVisible(mFragmentInfo, "")
-            }
+            )
+            setTextAndVisible(
+                mId,
+                resources?.getString(R.string.ms_view_check_info_id, DevelopUtil.getIdText(current))
+            )
+            setTextAndVisible(
+                mPosition, resources?.getString(
+                    R.string.ms_view_check_info_size,
+                    current.width,
+                    current.height
+                )
+            )
+            setTextAndVisible(mDesc, getViewExtraInfo(current))
+        }
+        val activity: Activity? = ActivityUtils.getTopActivity()
+        if (activity != null) {
+            val activityText = activity.javaClass.simpleName
+            setTextAndVisible(
+                mActivityInfo,
+                resources?.getString(R.string.ms_view_check_info_activity, activityText)
+            )
+            val fragmentText: String? = getVisibleFragment(activity)
+            setTextAndVisible(
+                mFragmentInfo,
+                resources?.getString(R.string.ms_view_check_info_fragment, fragmentText)
+            )
+        } else {
+            setTextAndVisible(mActivityInfo, "")
+            setTextAndVisible(mFragmentInfo, "")
         }
     }
 
@@ -160,6 +191,13 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
                 )
                 msKitView?.preformPreCheckView()
             }
+            mViewPickerRefresh-> {
+                val viewList = DevelopUtil.getPhoneWindow()
+                spinnerAdapter?.clear()
+                spinnerAdapter?.addAll(viewList)
+                spinnerAdapter?.notifyDataSetChanged()
+                mViewPicker?.setSelection(0)
+            }
         }
     }
 
@@ -174,7 +212,7 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
                     ColorUtil.parseColorInt(colorInt)
                 info.append(
                     resources?.getString(
-                        R.string.dk_view_check_info_desc,
+                        R.string.ms_view_check_info_desc,
                         backgroundColor
                     )
                 )
@@ -185,7 +223,7 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
         if (v.paddingLeft != 0 && v.paddingTop != 0 && v.paddingRight != 0 && v.paddingBottom != 0) {
             info.append(
                 resources?.getString(
-                    R.string.dk_view_check_info_padding,
+                    R.string.ms_view_check_info_padding,
                     v.paddingLeft,
                     v.paddingTop,
                     v.paddingRight,
@@ -201,7 +239,7 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
             if (mp.leftMargin != 0 && mp.topMargin != 0 && mp.rightMargin != 0 && mp.bottomMargin != 0) {
                 info.append(
                     resources?.getString(
-                        R.string.dk_view_check_info_margin,
+                        R.string.ms_view_check_info_margin,
                         mp.leftMargin,
                         mp.topMargin,
                         mp.rightMargin,
@@ -216,11 +254,11 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
             val tv = v
             val textColor: String =
                 ColorUtil.parseColorInt(tv.currentTextColor)
-            info.append(resources?.getString(R.string.dk_view_check_info_text_color, textColor))
+            info.append(resources?.getString(R.string.ms_view_check_info_text_color, textColor))
             info.append("\n")
             info.append(
                 resources?.getString(
-                    R.string.dk_view_check_info_text_size,
+                    R.string.ms_view_check_info_text_size,
                     tv.textSize.toInt()
                 )
             )
@@ -289,4 +327,5 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
         }
         return builder.toString()
     }
+
 }
