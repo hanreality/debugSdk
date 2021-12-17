@@ -3,7 +3,11 @@ package com.melot.android.debug.sdk.kit.fragmentInfo
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.util.AttributeSet
+import android.view.ViewTreeObserver
 import android.widget.FrameLayout
+import com.melot.android.debug.sdk.core.MsKitManager
+import com.melot.android.debug.sdk.util.ActivityUtils
 import com.melot.android.debug.sdk.util.BitmapCreator
 import com.melot.android.debug.sdk.view.layer.FragmentNameLayer
 
@@ -11,15 +15,17 @@ import com.melot.android.debug.sdk.view.layer.FragmentNameLayer
  * Author: han.chen
  * Time: 2021/12/8 12:22
  */
-class FragmentInfoView constructor(
-    context: Context
-) : FrameLayout(context) {
+class FragmentInfoView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
     private var fragmentNameLayer: FragmentNameLayer? = null
     private val canvas = Canvas()
     private var bitmap: Bitmap? = null
 
     init {
-        fragmentNameLayer = FragmentNameLayer(context)
+        fragmentNameLayer = FragmentNameLayer(ActivityUtils.getTopActivity())
     }
 
     private fun drawInfo(canvas: Canvas) {
@@ -71,5 +77,16 @@ class FragmentInfoView constructor(
             return
         }
         removeView(fragmentNameLayer)
+    }
+
+    fun updateViewLayout() {
+        removeView(fragmentNameLayer)
+        fragmentNameLayer = FragmentNameLayer(ActivityUtils.getTopActivity())
+        if (MsKitManager.FRAGMENT_INFO_CHECKED) {
+            addView(
+                fragmentNameLayer,
+                fragmentNameLayer?.getLayoutParams(generateDefaultLayoutParams())
+            )
+        }
     }
 }

@@ -13,7 +13,7 @@ open class MsKitFrameLayout @JvmOverloads constructor(
     context: Context,
     flag: Int,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = -1
+    defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), MsKitViewInterface {
     companion object {
         val MsKitFrameLayoutFlag_ROOT = 100

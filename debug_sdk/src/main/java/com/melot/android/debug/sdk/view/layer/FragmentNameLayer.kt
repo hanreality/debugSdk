@@ -9,7 +9,6 @@ import android.text.style.BackgroundColorSpan
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import com.melot.android.debug.sdk.util.DevelopUtil
 import com.melot.android.debug.sdk.util.ActivityUtils
 
 /**
@@ -37,7 +36,7 @@ class FragmentNameLayer(context: Context) : AbsLayer(context) {
 
     override fun onAttached(rootView: View?) {
         super.onAttached(rootView)
-        val activity = ActivityUtils.findActivity(rootView)
+        val activity = ActivityUtils.getTopActivity()
         if (activity is FragmentActivity) {
             mActivity = activity
         }

@@ -30,6 +30,7 @@ class FragmentInfoKit : AbstractKit() {
     }
 
     override fun onClick(activity: Activity?): Boolean {
+        MsKit.launchFloating<ViewFragmentDrawMsKitView>()
         MsKit.launchFloating<ViewFragmentInfoMsKitView>()
         return true
     }

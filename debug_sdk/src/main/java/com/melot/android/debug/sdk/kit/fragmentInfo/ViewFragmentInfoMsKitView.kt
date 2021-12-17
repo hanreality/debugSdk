@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -14,6 +16,8 @@ import com.melot.android.debug.sdk.core.AbsMsKitView
 import com.melot.android.debug.sdk.core.MsKitManager
 import com.melot.android.debug.sdk.core.MsKitViewLayoutParams
 import com.melot.android.debug.sdk.core.MsKitViewManager
+import com.melot.android.debug.sdk.kit.viewcheck.ViewCheckMsKitView
+import com.melot.android.debug.sdk.util.ActivityUtils
 import com.melot.android.debug.sdk.util.DevelopUtil
 
 /**
@@ -28,7 +32,7 @@ class ViewFragmentInfoMsKitView : AbsMsKitView(), View.OnClickListener {
     private var decorRootView: FrameLayout? = null
 
     override fun onCreate(context: Context) {
-        fragmentInfoView = FragmentInfoView(context)
+//        fragmentInfoView = FragmentInfoView(context)
     }
 
     override fun onCreateView(context: Context?, rootView: FrameLayout?): View? {
@@ -41,7 +45,8 @@ class ViewFragmentInfoMsKitView : AbsMsKitView(), View.OnClickListener {
         switch = findViewById(R.id.switch_btn)
         switch?.setOnCheckedChangeListener { _, isChecked ->
             MsKitManager.FRAGMENT_INFO_CHECKED = isChecked
-            fragmentInfoView?.generateSwitch(isChecked)
+//            fragmentInfoView?.generateSwitch(isChecked)
+            MsKit.getMsKitView(activity, ViewFragmentDrawMsKitView::class.java)?.generateSwitch(isChecked)
         }
         switch?.isChecked = MsKitManager.FRAGMENT_INFO_CHECKED
     }
@@ -57,19 +62,20 @@ class ViewFragmentInfoMsKitView : AbsMsKitView(), View.OnClickListener {
     override fun onClick(v: View?) {
         if (v == close) {
             MsKit.removeFloating(ViewFragmentInfoMsKitView::class.java)
+            MsKit.removeFloating(ViewFragmentDrawMsKitView::class.java)
         }
     }
 
     override fun dealDecorRootView(decorRootView: FrameLayout?) {
         super.dealDecorRootView(decorRootView)
-        this.decorRootView = decorRootView
-        decorRootView?.addView(fragmentInfoView, 0)
+//        this.decorRootView = decorRootView
+//        decorRootView?.addView(fragmentInfoView, 0)
     }
 
     override fun onDestroy() {
         MsKitManager.FRAGMENT_INFO_CHECKED = false
-        decorRootView?.removeView(fragmentInfoView)
-        fragmentInfoView = null
+//        decorRootView?.removeView(fragmentInfoView)
+//        fragmentInfoView = null
         super.onDestroy()
     }
 

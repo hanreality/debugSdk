@@ -94,16 +94,21 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
                     position: Int,
                     id: Long
                 ) {
+                    viewList.forEach {
+                        it.selected = false
+                    }
+                    viewList[position].selected = true
                     val decorView = viewList[position].decorView
                     MsKit.getMsKitView(activity, ViewCheckMsKitView::class.java)
                         ?.setSelectedDecorView(decorView)
+
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
 
                 }
             }
-            mViewPicker?.setSelection(0)
+            mViewPicker?.setSelection(viewList.size - 1)
         }
     }
 
@@ -195,7 +200,7 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
                 spinnerAdapter?.clear()
                 spinnerAdapter?.addAll(viewList)
                 spinnerAdapter?.notifyDataSetChanged()
-                mViewPicker?.setSelection(0)
+                mViewPicker?.setSelection(viewList.size - 1)
             }
         }
     }

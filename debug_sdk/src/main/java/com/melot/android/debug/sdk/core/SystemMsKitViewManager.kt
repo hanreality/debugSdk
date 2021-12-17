@@ -5,6 +5,7 @@ import android.content.Context
 import android.text.TextUtils
 import com.melot.android.debug.sdk.MsKit
 import com.melot.android.debug.sdk.extension.tagName
+import com.melot.android.debug.sdk.kit.fragmentInfo.ViewFragmentDrawMsKitView
 import com.melot.android.debug.sdk.kit.toolpanel.ToolPanelMsKitView
 import com.melot.android.debug.sdk.main.MainIconMsKitView
 import com.melot.android.debug.sdk.util.MsKitSystemUtil
@@ -111,6 +112,8 @@ internal class SystemMsKitViewManager : AbsMsKitViewManager() {
         if (MsKitManager.ALWAYS_SHOW_MAIN_ICON && !MsKit.isShow) {
             MsKit.show()
         }
+        MsKit.getMsKitView(activity, ViewFragmentDrawMsKitView::class.java)
+            ?.updateViewLayout(ViewFragmentDrawMsKitView::class.tagName, false)
     }
 
     override fun onActivityBackResume(activity: Activity?) {
@@ -128,6 +131,8 @@ internal class SystemMsKitViewManager : AbsMsKitViewManager() {
                 MsKitManager.MAIN_ICON_HAS_SHOW = true
             }
         }
+        MsKit.getMsKitView(activity, ViewFragmentDrawMsKitView::class.java)
+            ?.updateViewLayout(ViewFragmentDrawMsKitView::class.tagName, false)
     }
 
     override fun onActivityPaused(activity: Activity?) {
