@@ -7,8 +7,7 @@ import android.view.View
  * Time: 2021/12/14 09:58
  */
 class ViewWindow(var decorView: View) {
-    var selected = false
     override fun toString(): String {
-        return (if (selected) "*" else "") + decorView.toString()
+        return decorView.toString()
     }
 }

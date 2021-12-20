@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.melot.android.debug.sdk.MsKit
 import com.melot.android.debug.sdk.R
 import com.melot.android.debug.sdk.core.AbsMsKitView
@@ -35,8 +36,8 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
     private var mActivityInfo: TextView? = null
     private var mFragmentInfo: TextView? = null
 
-    private var mPre: ImageView? = null
-    private var mNext: ImageView? = null
+    private var mPre: View? = null
+    private var mNext: View? = null
     private var mClose: ImageView? = null
 
     private var mViewPicker: Spinner? = null
@@ -65,9 +66,9 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
         mFragmentInfo = findViewById(R.id.fragment)
         mClose = findViewById(R.id.close)
         mClose?.setOnClickListener(this)
-        mPre = findViewById(R.id.pre)
+        mPre = findViewById(R.id.fl_pre)
         mPre?.setOnClickListener(this)
-        mNext = findViewById(R.id.next)
+        mNext = findViewById(R.id.fl_next)
         mNext?.setOnClickListener(this)
         mViewPicker = findViewById(R.id.view_picker)
         mViewPickerRefresh = findViewById(R.id.view_picker_refresh)
@@ -94,10 +95,6 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
                     position: Int,
                     id: Long
                 ) {
-                    viewList.forEach {
-                        it.selected = false
-                    }
-                    viewList[position].selected = true
                     val decorView = viewList[position].decorView
                     MsKit.getMsKitView(activity, ViewCheckMsKitView::class.java)
                         ?.setSelectedDecorView(decorView)
@@ -195,7 +192,7 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
                 )
                 msKitView?.preformPreCheckView()
             }
-            mViewPickerRefresh-> {
+            mViewPickerRefresh -> {
                 val viewList = DevelopUtil.getWindowDecorViews()
                 spinnerAdapter?.clear()
                 spinnerAdapter?.addAll(viewList)
@@ -224,34 +221,30 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
             }
         }
         // padding
-        if (v.paddingLeft != 0 && v.paddingTop != 0 && v.paddingRight != 0 && v.paddingBottom != 0) {
-            info.append(
-                resources?.getString(
-                    R.string.ms_view_check_info_padding,
-                    v.paddingLeft,
-                    v.paddingTop,
-                    v.paddingRight,
-                    v.paddingBottom
-                )
+        info.append(
+            resources?.getString(
+                R.string.ms_view_check_info_padding,
+                v.paddingLeft,
+                v.paddingTop,
+                v.paddingRight,
+                v.paddingBottom
             )
-            info.append("\n")
-        }
+        )
+        info.append("\n")
         // margin
         val layoutParams = v.layoutParams
         if (layoutParams is MarginLayoutParams) {
             val mp = layoutParams
-            if (mp.leftMargin != 0 && mp.topMargin != 0 && mp.rightMargin != 0 && mp.bottomMargin != 0) {
-                info.append(
-                    resources?.getString(
-                        R.string.ms_view_check_info_margin,
-                        mp.leftMargin,
-                        mp.topMargin,
-                        mp.rightMargin,
-                        mp.bottomMargin
-                    )
+            info.append(
+                resources?.getString(
+                    R.string.ms_view_check_info_margin,
+                    mp.leftMargin,
+                    mp.topMargin,
+                    mp.rightMargin,
+                    mp.bottomMargin
                 )
-                info.append("\n")
-            }
+            )
+            info.append("\n")
         }
         // TextView信息
         if (v is TextView) {
@@ -290,7 +283,7 @@ class ViewCheckerInfoMsKitView : AbsMsKitView(), ViewCheckMsKitView.OnViewSelect
             return null
         }
         val builder = StringBuilder()
-        return if (activity is AppCompatActivity) {
+        return if (activity is FragmentActivity) {
             val fragmentManager = activity.supportFragmentManager
             val fragments = fragmentManager.fragments
             if (fragments.size != 0) {
