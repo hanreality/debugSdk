@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/ms_info_background">
+
+        <TextView
+            android:id="@+id/switch_text"
+            style="@style/MS.Text.Darker"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/ms_layout_border" />
+
+        <CheckBox
+            android:id="@+id/switch_btn"
+            style="@style/MS.CheckBox"
+            android:layout_toRightOf="@+id/switch_text" />
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/debug_close_icon" />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_below="@+id/switch_text"
+            android:layout_marginTop="16dp"
+            android:id="@+id/desc_container"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:flexWrap="wrap" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

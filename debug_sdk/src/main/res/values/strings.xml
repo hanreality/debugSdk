@@ -13,6 +13,7 @@
     <string name="ms_change_server_release">Release</string>
     <string name="ms_change_server_debug">Beta</string>
     <string name="ms_view_checker">控件检查</string>
+    <string name="ms_layout_border">布局边框</string>
     <string name="ms_kit_mode_desc">悬浮窗模式:
         \n
         1）系统代表系统悬浮窗(需要系统权限)

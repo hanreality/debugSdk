@@ -37,6 +37,11 @@
         "allClassName": "com.melot.android.debug.sdk.kit.viewcheck.ViewCheckerKit",
         "checked": true,
         "innerKitId": "mskit_sdk_ui_view_checker"
+      },
+      {
+        "allClassName": "com.melot.android.debug.sdk.kit.layoutborder.LayoutBorderKit",
+        "checked": true,
+        "innerKitId": "mskit_sdk_ui_layout_border"
       }
     ]
   }
