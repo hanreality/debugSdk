@@ -42,7 +42,7 @@
                 android:layout_weight="1"
                 android:checked="true"
                 android:text="@string/ms_kit_mode_rb_normal"
-                android:textColor="@color/dk_color_324456" />
+                android:textColor="@color/ms_color_324456" />
 
             <RadioButton
                 android:id="@+id/rb_system"
@@ -51,7 +51,7 @@
                 android:layout_weight="1"
                 android:checked="false"
                 android:text="@string/ms_kit_mode_rb_system"
-                android:textColor="@color/dk_color_324456" />
+                android:textColor="@color/ms_color_324456" />
 
         </RadioGroup>
 

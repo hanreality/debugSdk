@@ -7,5 +7,6 @@ package com.melot.android.debug.sdk.model
 data class DebugTestAccountData(
     var accountId: String,
     var password: String,
-    var info:String?
+    var info:String?,
+    var detail:String?
 )

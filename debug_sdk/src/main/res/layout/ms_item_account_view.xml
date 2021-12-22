@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/account_id"
@@ -13,6 +14,16 @@
         android:paddingBottom="6dp"
         android:textColor="#222222"
         android:textSize="16dp"
+        tools:text="@tools:sample/full_names" />
+
+    <TextView
+        android:id="@+id/account_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="32dp"
+        android:paddingBottom="6dp"
+        android:textColor="#999999"
+        android:textSize="13dp"
         tools:text="@tools:sample/full_names" />
 
 </LinearLayout>
