@@ -39,7 +39,7 @@ class QuickLoginInfoMsKitView : AbsMsKitView(), View.OnClickListener {
     }
 
     override fun onCreateView(context: Context?, rootView: FrameLayout?): View? {
-        return LayoutInflater.from(context).inflate(R.layout.ms_float_view_page_info, null)
+        return LayoutInflater.from(context).inflate(R.layout.ms_float_view_quick_login_info, null)
     }
 
     override fun onViewCreated(rootView: FrameLayout?) {
