@@ -34,6 +34,7 @@ class MainIconMsKitView : AbsMsKitView() {
     override fun onViewCreated(rootView: FrameLayout?) {
         msKitView?.id = R.id.float_icon_id
         msKitView?.setOnClickListener {
+            parentView?.requestFocus()
             MsKit.showToolPanel()
         }
         mainIconView = findViewById(R.id.main_icon_view)

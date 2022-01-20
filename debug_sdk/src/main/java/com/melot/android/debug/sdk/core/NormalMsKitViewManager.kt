@@ -343,7 +343,7 @@ internal class NormalMsKitViewManager : AbsMsKitViewManager() {
             //解决无法获取返回按键的问题
             msKitRootView.setFocusable(true)
             msKitRootView.setFocusableInTouchMode(true)
-            msKitRootView.requestFocus()
+//            msKitRootView.requestFocus()
             msKitRootView.setId(R.id.msKit_contentview_id)
             val msKitParams = FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
