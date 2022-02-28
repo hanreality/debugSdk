@@ -1,6 +1,10 @@
 package com.melot.android.debug.sdk.util;
 
+import android.text.TextUtils;
+
 import com.melot.android.KKSp;
+
+import java.util.Set;
 
 /**
  * Author: han.chen
@@ -77,6 +81,67 @@ public class MMKVUtil {
 
     public static void removeData(String key) {
         getKKsp().remove(key);
+    }
+
+    public static String[] allKeys() {
+        return getKKsp().allKeys();
+    }
+
+    public static Object getObjectValue(String key) {
+        String value = getString(key);
+        if (!TextUtils.isEmpty(value)) {
+            if (value.charAt(0) == 0x01) {
+                return getKKsp().getMmkv().decodeStringSet(key);
+            } else {
+                return value;
+            }
+        }
+        Set<String> set = getKKsp().getMmkv().decodeStringSet(key);
+        if (set != null && set.size() == 0) {
+            float valueFloat = getKKsp().getMmkv().decodeFloat(key);
+            double valueDouble = getKKsp().getMmkv().decodeDouble(key);
+            if (Float.compare(valueFloat, 0f) == 0 || Float.compare(valueFloat, Float.NaN) == 0) {
+                return valueFloat;
+            } else {
+                return valueDouble;
+            }
+        }
+
+        int valueInt = getKKsp().getMmkv().decodeInt(key);
+        long valueLong = getKKsp().getMmkv().decodeLong(key);
+        if (valueInt != valueLong) {
+            return valueLong;
+        } else {
+            return valueInt;
+        }
+    }
+
+    public static String getObjectType(String key) {
+        String value = getString(key);
+        if (!TextUtils.isEmpty(value)) {
+            if (value.charAt(0) == 0x01) {
+                return "StringSet";
+            } else {
+                return "String";
+            }
+        }
+        Set<String> set = getKKsp().getMmkv().decodeStringSet(key);
+        if (set != null && set.size() == 0) {
+            float valueFloat = getKKsp().getMmkv().decodeFloat(key);
+            if (Float.compare(valueFloat, 0f) == 0 || Float.compare(valueFloat, Float.NaN) == 0) {
+                return "double";
+            } else {
+                return "float";
+            }
+        }
+
+        int valueInt = getKKsp().getMmkv().decodeInt(key);
+        long valueLong = getKKsp().getMmkv().decodeLong(key);
+        if (valueInt != valueLong) {
+            return "long";
+        } else {
+            return "int";
+        }
     }
 
 }

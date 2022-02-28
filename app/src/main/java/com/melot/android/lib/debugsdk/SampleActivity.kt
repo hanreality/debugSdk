@@ -18,7 +18,9 @@ class SampleActivity : AppCompatActivity() {
 
         findViewById<View>(R.id.open).setOnClickListener {
             val intent = Intent(this, TargetActivity::class.java)
-            intent.putExtra("hell0", 1233)
+            intent.putExtra("a", 1233)
+            intent.putExtra("b", 1233)
+            intent.putExtra("c", 1233)
             startActivity(intent)
         }
 

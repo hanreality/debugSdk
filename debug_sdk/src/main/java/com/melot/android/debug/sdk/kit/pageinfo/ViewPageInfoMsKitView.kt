@@ -1,28 +1,35 @@
 package com.melot.android.debug.sdk.kit.pageinfo
 
+import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.melot.android.debug.sdk.MsKit
 import com.melot.android.debug.sdk.R
 import com.melot.android.debug.sdk.core.AbsMsKitView
 import com.melot.android.debug.sdk.core.MsKitViewLayoutParams
 import com.melot.android.debug.sdk.util.DevelopUtil
 import com.melot.android.debug.sdk.util.ActivityUtils
+import com.melot.android.debug.sdk.util.ColorUtil
+import com.melot.android.debug.sdk.util.LifecycleListenerUtil
+import com.melot.kkannotation.Route
 
 /**
  * Author: han.chen
  * Time: 2021/12/7 19:57
  */
-class ViewPageInfoMsKitView : AbsMsKitView(), View.OnClickListener {
-    private var info: TextView? = null
+class ViewPageInfoMsKitView : AbsMsKitView(), View.OnClickListener, LifecycleListenerUtil.LifecycleListener {
     private var close: ImageView? = null
+    private var activityName : TextView? = null
+    private var bundleContainer :ViewGroup? = null
     override fun onCreate(context: Context) {
-
+        LifecycleListenerUtil.registerListener(this)
     }
 
     override fun onCreateView(context: Context?, rootView: FrameLayout?): View? {
@@ -30,9 +37,12 @@ class ViewPageInfoMsKitView : AbsMsKitView(), View.OnClickListener {
     }
 
     override fun onViewCreated(rootView: FrameLayout?) {
-        info = findViewById(R.id.info)
         close = findViewById(R.id.close)
         close?.setOnClickListener(this)
+        activityName = findViewById(R.id.activity_name)
+        activityName?.setBackgroundColor(ColorUtil.getRandomColor())
+        bundleContainer = findViewById(R.id.bundle_container)
+        updatePageInfo(ActivityUtils.getTopActivity())
     }
 
     override fun initMsKitViewLayoutParams(params: MsKitViewLayoutParams) {
@@ -57,23 +67,61 @@ class ViewPageInfoMsKitView : AbsMsKitView(), View.OnClickListener {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        ActivityUtils.getTopActivity()?.let {
+    private fun updatePageInfo(activity: Activity?) {
+        activity?.run {
             val stringBuilder = StringBuilder()
                 .append("Activity: ")
-                .append(it::class.java.name)
-
-            it.intent.extras?.let { bundle ->
-                val extras = StringBuilder()
-                bundle.keySet().forEach {
-                    extras.append(it).append("=").append(bundle[it]).append(",")
-                }
-                extras.replace(extras.lastIndex, extras.length, "")
-                stringBuilder.append("{Bundle[${extras}]}")
+                .append(this::class.java.name)
+                .append("\n")
+            activityName?.text = this::class.java.name
+            getRoute(activity)?.run {
+                stringBuilder.append("Route:")
+                    .append(this)
+                    .append("\n")
             }
-            info?.text = stringBuilder.toString()
-        }
+            bundleContainer?.removeAllViews()
+            this.intent.extras?.also {bundle->
+                bundle.keySet().forEach {
+                    val item : TextView = LayoutInflater.from(context).inflate(R.layout.ms_page_info_bundle_item, bundleContainer, false) as TextView
+                    item.setBackgroundColor(ColorUtil.getRandomColor())
+                    item.text = "${it} = ${bundle[it]}"
+                    bundleContainer?.addView(item)
+                }
+            }
+            if (bundleContainer?.childCount == 0) {
+                val item : TextView = LayoutInflater.from(context).inflate(R.layout.ms_page_info_bundle_item, bundleContainer, false) as TextView
+                item.setBackgroundColor(ColorUtil.getRandomColor())
+                item.text = "no extras"
+                bundleContainer?.addView(item)
+            }
 
+        }
+    }
+
+    private fun getRoute(activity: Activity?) :String? {
+        return null
+    }
+
+    override fun onActivityResumed(activity: Activity?) {
+        if (!isNormalMode) {
+            updatePageInfo(activity)
+        }
+    }
+
+    override fun onActivityPaused(activity: Activity?) {
+        
+    }
+
+    override fun onFragmentAttached(f: Fragment?) {
+        
+    }
+
+    override fun onFragmentDetached(f: Fragment?) {
+        
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LifecycleListenerUtil.unregisterListener(this)
     }
 }

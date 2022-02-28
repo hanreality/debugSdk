@@ -10,6 +10,7 @@
     <string name="ms_fragment_info">碎片信息</string>
     <string name="ms_quick_login">快速登录</string>
     <string name="ms_development">开发者选项</string>
+    <string name="ms_sp_manager">SP管理</string>
     <string name="ms_change_server_release">Release</string>
     <string name="ms_change_server_debug">Beta</string>
     <string name="ms_view_checker">控件检查</string>
@@ -35,4 +36,5 @@
     <string name="ms_view_check_info_activity">当前Activity：%1$s</string>
     <string name="ms_view_check_info_fragment">可见Fragments：%1$s</string>
     <string name="debug_window_label">窗口：</string>
+    <string name="ms_sp_empty_input">输入为空</string>
 </resources>

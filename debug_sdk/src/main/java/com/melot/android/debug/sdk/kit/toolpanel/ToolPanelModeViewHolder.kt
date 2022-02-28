@@ -1,20 +1,15 @@
 package com.melot.android.debug.sdk.kit.toolpanel
 
 import android.content.Context
-import android.os.Process
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
-import com.melot.android.debug.sdk.MsKit
 import com.melot.android.debug.sdk.R
 import com.melot.android.debug.sdk.base.BaseViewHolder
 import com.melot.android.debug.sdk.constant.SharedPrefsKey
 import com.melot.android.debug.sdk.util.AppUtils
 import com.melot.android.debug.sdk.util.MMKVUtil
-import kotlin.system.exitProcess
 
 /**
  * Author: han.chen

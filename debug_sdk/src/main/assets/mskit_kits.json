@@ -26,6 +26,11 @@
         "allClassName":"com.melot.android.debug.sdk.kit.sysinfo.DevelopmentPageKit",
         "checked": true,
         "innerKitId": "mskit_sdk_common_ck_devpage"
+      },
+      {
+        "allClassName":"com.melot.android.debug.sdk.kit.spinfo.DevelopmentPageKit",
+        "checked": true,
+        "innerKitId": "mskit_sdk_common_sp_manager"
       }
 
     ]
