@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/ms_color_1"
-                android:ellipsize="start"
+                android:ellipsize="marquee"
                 android:gravity="center"
                 android:paddingLeft="5dp"
                 android:paddingTop="1dp"

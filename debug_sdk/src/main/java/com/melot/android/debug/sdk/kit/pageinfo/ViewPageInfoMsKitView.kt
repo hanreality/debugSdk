@@ -41,6 +41,7 @@ class ViewPageInfoMsKitView : AbsMsKitView(), View.OnClickListener, LifecycleLis
         close?.setOnClickListener(this)
         activityName = findViewById(R.id.activity_name)
         activityName?.setBackgroundColor(ColorUtil.getRandomColor())
+        activityName?.isSelected = true
         bundleContainer = findViewById(R.id.bundle_container)
         updatePageInfo(ActivityUtils.getTopActivity())
     }
@@ -84,7 +85,7 @@ class ViewPageInfoMsKitView : AbsMsKitView(), View.OnClickListener, LifecycleLis
                 bundle.keySet().forEach {
                     val item : TextView = LayoutInflater.from(context).inflate(R.layout.ms_page_info_bundle_item, bundleContainer, false) as TextView
                     item.setBackgroundColor(ColorUtil.getRandomColor())
-                    item.text = "${it} = ${bundle[it]}"
+                    item.text = "${it}=${bundle[it]}"
                     bundleContainer?.addView(item)
                 }
             }

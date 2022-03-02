@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
@@ -26,6 +27,49 @@
             android:textStyle="bold" />
 
     </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <EditText
+            android:id="@+id/ms_sp_search_input"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_marginRight="6dp"
+            android:layout_weight="1"
+            android:textSize="13sp"
+            android:hint="输入key快速筛选"
+            android:textColorHint="#999999"
+            android:paddingLeft="12dp"
+            android:background="@drawable/ms_search_input_bg"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"/>
+
+        <com.android.widget.AdvancedTextView
+            android:id="@+id/ms_sp_search_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ffd360"
+            android:gravity="center"
+            android:paddingLeft="12dp"
+            android:paddingTop="6dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="6dp"
+            android:text="@string/ms_sp_search"
+            android:textColor="#333333"
+            android:textSize="12sp"
+            app:border_radius="44dp"
+            android:enabled="false"
+            app:disable_border_radius="44dp"
+            app:disable_text_color="#ffffff"
+            app:disable_color="#3c000000"/>
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sp_recycler"

@@ -1,8 +1,11 @@
 package com.melot.android.debug.sdk.kit.spinfo
 
 import android.content.Context
+import android.text.InputType
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.melot.android.debug.sdk.R
 import com.melot.android.debug.sdk.util.MMKVUtil
 
 /**
@@ -22,8 +25,30 @@ class SpItemAdapter(var context: Context?, var items: ArrayList<SpItem>) :
             }
 
             override fun onModify(item: SpItem, position: Int) {
-                MMKVUtil.setString(item.key, item.value.toString())
-                notifyItemChanged(position)
+                try {
+                    when (item.type) {
+                        "String" -> {
+                            MMKVUtil.setString(item.key, item.value.toString())
+                        }
+                        "int" -> {
+                            MMKVUtil.setInt(item.key, item.value as Int)
+                        }
+                        "long" -> {
+                            MMKVUtil.setLong(item.key, item.value as Long)
+                        }
+                        "double", "float" -> {
+                            MMKVUtil.setFloat(item.key, item.value as Float)
+                        }
+                    }
+                    notifyItemChanged(position)
+                } catch (e: Exception) {
+                    Toast.makeText(
+                        context,
+                        context?.getText(R.string.ms_sp_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    e.printStackTrace()
+                }
             }
 
         }

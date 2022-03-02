@@ -37,4 +37,6 @@
     <string name="ms_view_check_info_fragment">可见Fragments：%1$s</string>
     <string name="debug_window_label">窗口：</string>
     <string name="ms_sp_empty_input">输入为空</string>
+    <string name="ms_sp_error">修改SP出错，请检查输入</string>
+    <string name="ms_sp_search">搜索</string>
 </resources>

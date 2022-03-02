@@ -57,7 +57,7 @@ dependencies {
     kapt 'com.google.auto.service:auto-service:1.0'
     implementation 'com.melot.android:kksp:1.0.6'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
-    implementation 'com.melot.android:baseView:1.0.9'
+    implementation 'com.melot.android:baseView:1.1.0'
     implementation 'com.google.android.material:material:1.4.0'
     compileOnly 'com.tencent:mmkv-static:1.2.8'
     compileOnly 'com.melot.android:complib:1.0.5'

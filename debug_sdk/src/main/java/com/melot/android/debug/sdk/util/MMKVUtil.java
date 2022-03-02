@@ -14,7 +14,7 @@ public class MMKVUtil {
     private static KKSp kkSp;
     private static KKSp getKKsp() {
         if (kkSp == null) {
-            kkSp = KKSp.getSp("ms_debug");
+            kkSp = KKSp.getSp("kksp");
         }
         return kkSp;
     }

@@ -1,9 +1,15 @@
 package com.melot.android.debug.sdk.kit.spinfo
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.melot.android.debug.sdk.R
@@ -19,6 +25,8 @@ class SpManagerPageMsKitView : AbsMsKitView() {
     private var spRecyclerView: RecyclerView? = null
     private var adapter: SpItemAdapter? = null
     private var spItems: ArrayList<SpItem> = ArrayList()
+    private var spSearchInput: EditText? = null
+    private var spSearchBtn: TextView? = null
 
     override fun onCreate(context: Context) {
 
@@ -29,8 +37,8 @@ class SpManagerPageMsKitView : AbsMsKitView() {
     }
 
     override fun onViewCreated(rootView: FrameLayout?) {
-        initData()
         initView()
+        initData()
     }
 
     private fun initData() {
@@ -39,6 +47,7 @@ class SpManagerPageMsKitView : AbsMsKitView() {
             val spItem = SpItem(it, MMKVUtil.getObjectValue(it), MMKVUtil.getObjectType(it))
             spItems.add(spItem)
         }
+        adapter?.notifyDataSetChanged()
     }
 
     private fun initView() {
@@ -50,6 +59,49 @@ class SpManagerPageMsKitView : AbsMsKitView() {
         spRecyclerView?.layoutManager = LinearLayoutManager(context)
         adapter = SpItemAdapter(context, spItems)
         spRecyclerView?.adapter = adapter
+        spSearchInput = findViewById(R.id.ms_sp_search_input)
+        spSearchBtn = findViewById(R.id.ms_sp_search_btn)
+        spSearchInput?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                spSearchBtn?.isEnabled = s?.isNotEmpty() == true
+                if (s.isNullOrEmpty()) {
+                    initData()
+                } else {
+                    filter(s.toString())
+                }
+            }
+
+        })
+        spSearchInput?.setOnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                spSearchBtn?.performClick()
+            }
+            return@setOnKeyListener true
+        }
+        spSearchBtn?.setOnClickListener {
+            spSearchInput?.text?.run {
+                filter(this.toString())
+            }
+        }
+    }
+
+    private fun filter(searchKey: String) {
+        spItems.clear()
+        MMKVUtil.allKeys().iterator().forEach {
+            if (it.contains(searchKey)) {
+                val spItem = SpItem(it, MMKVUtil.getObjectValue(it), MMKVUtil.getObjectType(it))
+                spItems.add(spItem)
+            }
+        }
+        adapter?.notifyDataSetChanged()
     }
 
     override fun initMsKitViewLayoutParams(params: MsKitViewLayoutParams) {

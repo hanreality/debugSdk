@@ -58,7 +58,7 @@ class SpItemViewHolder(var context: Context?, parent: ViewGroup?) : RecyclerView
             "String"-> {
                 spInput.inputType = InputType.TYPE_CLASS_TEXT
             }
-            "int","long"->{
+            "int","long"-> {
                 spInput.inputType = InputType.TYPE_CLASS_NUMBER
             }
             "double", "float"->{
