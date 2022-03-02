@@ -2,11 +2,11 @@ package com.melot.android.debug.sdk.kit.spinfo
 
 import android.content.Context
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.melot.android.debug.sdk.R
 import com.melot.android.debug.sdk.core.AbsMsKitView
 import com.melot.android.debug.sdk.core.MsKitViewLayoutParams
+import com.melot.android.debug.sdk.util.DevelopUtil
 import com.melot.android.debug.sdk.util.MMKVUtil
 
 /**
@@ -83,13 +84,19 @@ class SpManagerPageMsKitView : AbsMsKitView() {
         spSearchInput?.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 spSearchBtn?.performClick()
+                return@setOnKeyListener true
             }
-            return@setOnKeyListener true
+            return@setOnKeyListener false
         }
         spSearchBtn?.setOnClickListener {
             spSearchInput?.text?.run {
                 filter(this.toString())
             }
+            DevelopUtil.closeSoftKeyBoard(context, spSearchInput)
+        }
+        spRecyclerView?.setOnTouchListener { v, event ->
+            DevelopUtil.closeSoftKeyBoard(context, spSearchInput)
+            return@setOnTouchListener false
         }
     }
 

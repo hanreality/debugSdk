@@ -18,7 +18,6 @@ import com.melot.android.debug.sdk.util.DevelopUtil
 import com.melot.android.debug.sdk.util.ActivityUtils
 import com.melot.android.debug.sdk.util.ColorUtil
 import com.melot.android.debug.sdk.util.LifecycleListenerUtil
-import com.melot.kkannotation.Route
 
 /**
  * Author: han.chen

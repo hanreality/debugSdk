@@ -10,6 +10,8 @@ import android.provider.Settings
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.*
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.AnyRes
@@ -328,5 +330,12 @@ object DevelopUtil {
 
     private fun resourceHasPackage(@AnyRes resid: Int): Boolean {
         return resid ushr 24 != 0
+    }
+
+    fun closeSoftKeyBoard(con: Context?, et: EditText?): Boolean {
+        val imm = con?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        return if (imm != null && imm.isActive && et != null) {
+            imm.hideSoftInputFromWindow(et.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        } else false
     }
 }

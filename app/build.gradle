@@ -44,6 +44,5 @@ dependencies {
     releaseImplementation 'io.github.didi.dokit:dokitx-no-op:3.5.0.1'
     implementation 'com.melot.android:kksp:1.0.6'
     implementation 'com.tencent:mmkv-static:1.2.8'
-    implementation 'com.melot.android:complib:1.0.5'
-    implementation 'com.melot.android:baseView:1.0.9'
+    implementation 'com.melot.android:baseView:1.1.0'
 }
