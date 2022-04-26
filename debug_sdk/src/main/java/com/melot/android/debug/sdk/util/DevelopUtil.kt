@@ -17,11 +17,8 @@ import android.widget.LinearLayout
 import androidx.annotation.AnyRes
 import com.melot.android.debug.sdk.MsKit
 import com.melot.android.debug.sdk.model.ViewWindow
-import java.lang.Exception
-import java.lang.StringBuilder
 import java.lang.reflect.Field
 import java.lang.reflect.Method
-import kotlin.collections.ArrayList
 
 /**
  * Author: han.chen
@@ -136,10 +133,28 @@ object DevelopUtil {
      * @return the status bar's height
      */
     @JvmStatic
-    fun getStatusBarHeight(): Int {
-        val resources: Resources = MsKit.requireApp().resources
-        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-        return resources.getDimensionPixelSize(resourceId)
+    @JvmOverloads
+    fun getStatusBarHeight(context: Context? = MsKit.requireApp()): Int {
+        val resources: Resources = context?.resources ?: MsKit.requireApp().resources
+        val result = 0
+        try {
+            val resourceId = Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android")
+            if (resourceId > 0) {
+                val sizeOne: Int = resources.getDimensionPixelSize(resourceId)
+                val sizeTwo = Resources.getSystem().getDimensionPixelSize(resourceId)
+                return if (sizeTwo >= sizeOne) {
+                    sizeTwo
+                } else {
+                    val densityOne: Float = resources.displayMetrics.density
+                    val densityTwo = Resources.getSystem().displayMetrics.density
+                    val f = sizeOne * densityTwo / densityOne
+                    (if (f >= 0) f + 0.5f else f - 0.5f).toInt()
+                }
+            }
+        } catch (ignored: Resources.NotFoundException) {
+            return 0
+        }
+        return result
     }
 
     /**

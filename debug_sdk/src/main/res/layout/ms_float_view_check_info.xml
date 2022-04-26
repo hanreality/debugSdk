@@ -45,7 +45,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/debug_window_label"
                     android:gravity="left"/>
-                <Spinner
+                <com.melot.android.debug.sdk.view.PickSpinner
                     android:id="@+id/view_picker"
                     style="@style/MS.TextSmall.Dark"
                     android:layout_gravity="center_vertical"
