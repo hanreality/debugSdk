@@ -1,6 +1,8 @@
 package com.melot.android.debug.sdk.util
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -19,6 +21,9 @@ import com.melot.android.debug.sdk.MsKit
 import com.melot.android.debug.sdk.model.ViewWindow
 import java.lang.reflect.Field
 import java.lang.reflect.Method
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import kotlin.experimental.and
 
 /**
  * Author: han.chen
@@ -352,5 +357,12 @@ object DevelopUtil {
         return if (imm != null && imm.isActive && et != null) {
             imm.hideSoftInputFromWindow(et.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
         } else false
+    }
+
+    fun copyText(content:String?) {
+        content?.run {
+            val clipboard = MsKit.requireApp().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            clipboard.setPrimaryClip(ClipData.newPlainText(null, this))//参数一：标签，可为空，参数二：要复制到剪贴板的文本)
+        }
     }
 }

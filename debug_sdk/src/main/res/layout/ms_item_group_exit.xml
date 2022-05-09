@@ -1,19 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="15dp"
-    android:background="@drawable/ms_kit_group_background"
-    android:elevation="2dp">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/close"
-        style="@style/MS.Text"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="退出开发工具"
-        android:textColor="#cc3a4b" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ms_kit_group_background"
+        android:elevation="2dp">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/close"
+            style="@style/MS.Text"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="退出开发工具"
+            android:textColor="#cc3a4b" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ms_kit_group_background"
+        android:elevation="2dp">
+
+        <TextView
+            android:id="@+id/close_not_show_again"
+            style="@style/MS.Text"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="退出开发工具(非测试包需重新开启)"
+            android:textColor="#cc3a4b" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="debug_tool">开发工具</string>
     <string name="debug_category_mode">悬浮窗模式</string>
     <string name="debug_category_exit">退出</string>
@@ -11,6 +11,7 @@
     <string name="ms_quick_login">快速登录</string>
     <string name="ms_development">开发者选项</string>
     <string name="ms_sp_manager">SP管理</string>
+    <string name="ms_hint_manager">快捷操作</string>
     <string name="ms_change_server_release">Release</string>
     <string name="ms_change_server_debug">Beta</string>
     <string name="ms_view_checker">控件检查</string>
@@ -39,4 +40,8 @@
     <string name="ms_sp_empty_input">输入为空</string>
     <string name="ms_sp_error">修改SP出错，请检查输入</string>
     <string name="ms_sp_search">搜索</string>
+    <string name="ms_hint_dialog_confirm">确认</string>
+    <string name="ms_hint_channel">渠道号</string>
+    <string name="ms_hint_dialog_cancel">取消</string>
+    <string name="ms_dont_open_debug_tool">退下，我就想切换到<xliff:g>%s</xliff:g>服</string>
 </resources>

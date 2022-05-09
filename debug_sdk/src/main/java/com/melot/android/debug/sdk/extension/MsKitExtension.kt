@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
  * Author: han.chen
  * Time: 2021/12/3 16:22
  */
-val doKitGlobalScope = MainScope() + CoroutineName("DoKit")
+val msKitGlobalScope = MainScope() + CoroutineName("MsKit")
 
 val Activity.tagName: String
     get() {

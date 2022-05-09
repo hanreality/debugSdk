@@ -28,9 +28,14 @@
         "innerKitId": "mskit_sdk_common_ck_devpage"
       },
       {
-        "allClassName":"com.melot.android.debug.sdk.kit.spinfo.DevelopmentPageKit",
+        "allClassName":"com.melot.android.debug.sdk.kit.spinfo.SpManagerKit",
         "checked": true,
         "innerKitId": "mskit_sdk_common_sp_manager"
+      },
+      {
+        "allClassName":"com.melot.android.debug.sdk.kit.spinfo.HintManagerKit",
+        "checked": true,
+        "innerKitId": "mskit_sdk_common_hint_manager"
       }
 
     ]

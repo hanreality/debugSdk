@@ -40,6 +40,12 @@ object MsKitManager {
     @JvmField
     var FRAGMENT_INFO_CHECKED = false
 
+    /**
+     * 是否初始化
+     */
+    @JvmField
+    var IS_INSTALL = false
+
     @JvmField
     val GLOBAL_KITS: LinkedHashMap<String, MutableList<KitWrapItem>> = LinkedHashMap()
 }

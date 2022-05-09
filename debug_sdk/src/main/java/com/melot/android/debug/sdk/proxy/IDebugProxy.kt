@@ -14,4 +14,6 @@ interface IDebugProxy {
     fun quickLogin(id: String, pwd: String)
 
     fun getIcon(): Int
+
+    fun checkHint(key: String)
 }

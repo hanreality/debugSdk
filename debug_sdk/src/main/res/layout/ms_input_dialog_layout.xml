@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.widget.AdvancedRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    app:border_radius="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            tools:text="@tools:sample/full_names" />
+
+        <TextView
+            android:id="@+id/dialog_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="#666666"
+            android:textSize="12sp"
+            tools:text="@tools:sample/full_names" />
+
+        <com.android.widget.AdvancedFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#f2f4f6"
+            app:border_radius="3dp">
+
+            <EditText
+                android:id="@+id/dialog_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#00000000"
+                android:minHeight="44dp"
+                android:paddingLeft="12dp"
+                android:textSize="14sp"
+                tools:hint="@string/ms_hint_channel" />
+        </com.android.widget.AdvancedFrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <com.android.widget.AdvancedTextView
+                android:id="@+id/ok_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="#ffd630"
+                android:gravity="center"
+                android:text="@string/ms_hint_dialog_confirm"
+                android:textColor="#ffffff"
+                android:textSize="15sp"
+                app:bold_style="medium"
+                app:border_radius="3dp"
+                app:disable_border_radius="3dp"
+                app:disable_color="#cccccc" />
+
+            <com.android.widget.AdvancedTextView
+                android:id="@+id/cancel_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/ms_hint_dialog_cancel"
+                android:textColor="#ffd630"
+                android:textSize="15sp"
+                app:bold_style="medium"
+                app:border_color="#ffd630"
+                app:border_radius="3dp"
+                app:border_width="1dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/close_dialog"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_alignParentRight="true"
+        android:padding="11dp"
+        android:src="@drawable/debug_close_icon" />
+
+
+</com.android.widget.AdvancedRelativeLayout>

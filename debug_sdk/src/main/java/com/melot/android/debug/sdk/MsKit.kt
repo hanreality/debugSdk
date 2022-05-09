@@ -9,7 +9,7 @@ import com.melot.android.debug.sdk.constant.SharedPrefsKey
 import com.melot.android.debug.sdk.core.*
 import com.melot.android.debug.sdk.core.MsKitViewManager
 import com.melot.android.debug.sdk.core.SimpleMsKitLauncher
-import com.melot.android.debug.sdk.extension.doKitGlobalScope
+import com.melot.android.debug.sdk.extension.msKitGlobalScope
 import com.melot.android.debug.sdk.kit.AbstractKit
 import com.melot.android.debug.sdk.kit.toolpanel.KitGroupBean
 import com.melot.android.debug.sdk.kit.toolpanel.KitWrapItem
@@ -29,6 +29,7 @@ import java.util.*
 object MsKit {
 
     const val TAG = "MsKit"
+    const val encrypt = "ce3db0ac84416de8150710d546dbb097a220a3c1f282412dc0c241210eb385d3"
 
     @Volatile
     var app: Application? = null
@@ -40,6 +41,11 @@ object MsKit {
     val isShow: Boolean
         get() = MsKitManager.MAIN_ICON_HAS_SHOW
 
+    private val activityLifecycleCallbacks: MsKitActivityLifecycleCallbacks = MsKitActivityLifecycleCallbacks()
+
+    val installed :Boolean
+        get() = MsKitManager.IS_INSTALL
+
     @JvmStatic
     fun requireApp(): Application {
         return app ?: throw IllegalStateException("Dokit app no set")
@@ -47,6 +53,10 @@ object MsKit {
 
     fun getProxy() : IDebugProxy? {
         return debugProxy
+    }
+
+    fun setProxy(debugProxy: IDebugProxy?) {
+        this.debugProxy = debugProxy
     }
 
     @JvmStatic
@@ -104,16 +114,25 @@ object MsKit {
         return MsKitViewManager.INSTANCE.getMsKitView(activity, clazz) as? T
     }
 
-    fun install(app: Application, debugProxy: IDebugProxy?) {
-        this.app = app
-        this.debugProxy = debugProxy
+    fun install() {
+        if (installed) {
+            println("you have already install")
+            return
+        }
         val strMsKitMode = MMKVUtil.getString(SharedPrefsKey.FLOAT_START_MODE, "normal")
         MsKitManager.IS_NORMAL_FLOAT_MODE = strMsKitMode == "normal"
-        app.registerActivityLifecycleCallbacks(MsKitActivityLifecycleCallbacks())
+        requireApp().registerActivityLifecycleCallbacks(MsKitActivityLifecycleCallbacks())
         MsKitManager.GLOBAL_KITS.clear()
-        doKitGlobalScope.launch {
-            addInnerKit(app)
+        msKitGlobalScope.launch {
+            addInnerKit(requireApp())
         }
+        MsKitManager.IS_INSTALL = true
+    }
+
+    fun uninstall() {
+        app?.unregisterActivityLifecycleCallbacks(activityLifecycleCallbacks)
+        MsKitManager.GLOBAL_KITS.clear()
+        MsKitManager.IS_INSTALL = false
     }
 
     private fun addInnerKit(app: Application) {
