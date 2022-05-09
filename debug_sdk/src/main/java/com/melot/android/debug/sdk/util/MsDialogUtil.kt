@@ -24,10 +24,10 @@ object MsDialogUtil {
         hint: String?,
         inputType: Int,
         positiveText: String?,
-        positiveListener: View.OnClickListener?,
+        positiveListener: View.OnClickListener,
         negativeText: String?,
-        negativeListener: View.OnClickListener?,
-        closeDialogListener:View.OnClickListener?
+        negativeListener: View.OnClickListener,
+        closeDialogListener:View.OnClickListener
     ): View {
         val view = LayoutInflater.from(context).inflate(R.layout.ms_input_dialog_layout, null)
         val titleView = view.findViewById<TextView>(R.id.dialog_title)
@@ -44,14 +44,14 @@ object MsDialogUtil {
         okButton.text = positiveText
         okButton.setOnClickListener {
             it.tag = if (editView.text == null) "" else editView.text.toString()
-            positiveListener?.onClick(it)
+            positiveListener.onClick(it)
         }
         cancelButton.text = negativeText
         cancelButton.setOnClickListener {
-            negativeListener?.onClick(it)
+            negativeListener.onClick(it)
         }
         closeDialog.setOnClickListener {
-            closeDialogListener?.onClick(it)
+            closeDialogListener.onClick(it)
         }
         return view
     }
