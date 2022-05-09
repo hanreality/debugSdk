@@ -143,7 +143,7 @@ class HintManagerPageMsKitView : AbsMsKitView() {
                 "渠道号",
                 InputType.TYPE_CLASS_NUMBER,
                 "确认",
-                {
+                { it ->
                     val content = it.tag as? String
                     val key = if (TextUtils.isEmpty(content)) {
                         KK_CHANNEL
