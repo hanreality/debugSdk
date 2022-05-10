@@ -218,18 +218,27 @@ class HintManagerPageMsKitView : AbsMsKitView() {
                 "key",
                 InputType.TYPE_CLASS_TEXT,
                 "确定",
-                {
-                    val content = it.tag as? String
-                    content?.run {
-                        MsKit.getProxy()?.checkHint(this)
+                object :View.OnClickListener{
+                    override fun onClick(v: View) {
+                        val content = v.tag as? String
+                        content?.run {
+                            MsKit.getProxy()?.checkHint(this)
+                        }
+                        dialog.dismiss()
                     }
-                    dialog.dismiss()
+
                 },
                 "取消",
-                {
-                    dialog.dismiss()
-                }, {
-                    dialog.dismiss()
+                object :View.OnClickListener{
+                    override fun onClick(v: View?) {
+                        dialog.dismiss()
+                    }
+
+                }, object :View.OnClickListener{
+                    override fun onClick(v: View?) {
+                        dialog.dismiss()
+                    }
+
                 })
             dialog.setView(view)
             dialog.setCanceledOnTouchOutside(false)
