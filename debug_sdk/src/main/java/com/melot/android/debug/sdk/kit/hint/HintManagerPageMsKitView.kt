@@ -143,21 +143,29 @@ class HintManagerPageMsKitView : AbsMsKitView() {
                 "渠道号",
                 InputType.TYPE_CLASS_NUMBER,
                 "确认",
-                { it ->
-                    val content = it.tag as? String
-                    val key = if (TextUtils.isEmpty(content)) {
-                        KK_CHANNEL
-                    } else {
-                        "$KK_CHANNEL=$content"
+                object :View.OnClickListener{
+                    override fun onClick(v: View) {
+                        val content = v.tag as? String
+                        val key = if (TextUtils.isEmpty(content)) {
+                            KK_CHANNEL
+                        } else {
+                            "$KK_CHANNEL=$content"
+                        }
+                        MsKit.getProxy()?.checkHint(key)
+                        dialog.dismiss()
                     }
-                    MsKit.getProxy()?.checkHint(key)
-                    dialog.dismiss()
+
                 },
                 "取消",
-                {
-                    dialog.dismiss()
-                }, {
-                    dialog.dismiss()
+                object :View.OnClickListener{
+                    override fun onClick(v: View?) {
+                        dialog.dismiss()
+
+                    }
+                }, object :View.OnClickListener{
+                    override fun onClick(v: View?) {
+                        dialog.dismiss()
+                    }
                 })
             dialog.setView(view)
             dialog.setCanceledOnTouchOutside(false)
@@ -174,17 +182,25 @@ class HintManagerPageMsKitView : AbsMsKitView() {
                 "小程序path和pid以,分隔", "eg:path,pid",
                 InputType.TYPE_CLASS_TEXT,
                 "确认",
-                {
-                    val content = it.tag as? String
-                    DevelopUtil.copyText(content)
-                    MsKit.getProxy()?.checkHint(KK_MINI)
-                    dialog.dismiss()
+                object :View.OnClickListener{
+                    override fun onClick(v: View) {
+                        val content = v.tag as? String
+                        DevelopUtil.copyText(content)
+                        MsKit.getProxy()?.checkHint(KK_MINI)
+                        dialog.dismiss()
+                    }
+
                 },
                 "取消",
-                {
-                    dialog.dismiss()
-                }, {
-                    dialog.dismiss()
+                object :View.OnClickListener{
+                    override fun onClick(v: View?) {
+                        dialog.dismiss()
+
+                    }
+                }, object :View.OnClickListener{
+                    override fun onClick(v: View?) {
+                        dialog.dismiss()
+                    }
                 })
             dialog.setView(view)
             dialog.setCanceledOnTouchOutside(false)

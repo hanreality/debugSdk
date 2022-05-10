@@ -66,33 +66,41 @@ object MsDialogUtil {
                 "来尝试一下小圆球的功能吧", "请输入密码",
                 InputType.TYPE_TEXT_VARIATION_PASSWORD,
                 "确认",
-                {
-                    val content = it.tag as String
-                    val encrypt = AppUtils.shaEncrypt(content)
-                    if (TextUtils.equals(encrypt, MsKit.encrypt)) {
-                        if (isShow) {
-                            return@getInputDialog
+                object: View.OnClickListener {
+                    override fun onClick(v: View) {
+                        val content = v.tag as String
+                        val encrypt = AppUtils.shaEncrypt(content)
+                        if (TextUtils.equals(encrypt, MsKit.encrypt)) {
+                            if (isShow) {
+                                return
+                            }
+                            MMKVUtil.setBoolean("kk_debug_tool_enable", true)
+                            if (!installed) {
+                                install()
+                            }
+                            show()
+                            Toast.makeText(context, "小圆球已开启", Toast.LENGTH_LONG).show()
+                            dialog.dismiss()
+                        } else {
+                            Toast.makeText(context, "密码错误", Toast.LENGTH_LONG).show()
                         }
-                       MMKVUtil.setBoolean("kk_debug_tool_enable", true)
-                        if (!installed) {
-                            install()
-                        }
-                        show()
-                        Toast.makeText(context, "小圆球已开启", Toast.LENGTH_LONG).show()
-                        dialog.dismiss()
-                    } else {
-                        Toast.makeText(context, "密码错误", Toast.LENGTH_LONG).show()
                     }
+
                 },
                 context.resources.getString(
                     R.string.ms_dont_open_debug_tool,
                     if (MsKit.getProxy()?.debugConfig()?.serverDebug == true) "正式" else "测试"
                 ),
-                {
-                    MsKit.getProxy()?.changeServer()
-                    dialog.dismiss()
-                }, {
-                    dialog.dismiss()
+                object :View.OnClickListener{
+                    override fun onClick(v: View) {
+                        MsKit.getProxy()?.changeServer()
+                        dialog.dismiss()
+                    }
+                },
+                object :View.OnClickListener{
+                    override fun onClick(v: View) {
+                        dialog.dismiss()
+                    }
                 })
             dialog.setView(view)
             dialog.setCanceledOnTouchOutside(false)
