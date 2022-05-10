@@ -143,29 +143,21 @@ class HintManagerPageMsKitView : AbsMsKitView() {
                 "渠道号",
                 InputType.TYPE_CLASS_NUMBER,
                 "确认",
-                object :View.OnClickListener{
-                    override fun onClick(v: View) {
-                        val content = v.tag as? String
-                        val key = if (TextUtils.isEmpty(content)) {
-                            KK_CHANNEL
-                        } else {
-                            "$KK_CHANNEL=$content"
-                        }
-                        MsKit.getProxy()?.checkHint(key)
-                        dialog.dismiss()
+                {
+                    val content = it.tag as? String
+                    val key = if (TextUtils.isEmpty(content)) {
+                        KK_CHANNEL
+                    } else {
+                        "$KK_CHANNEL=$content"
                     }
-
+                    MsKit.getProxy()?.checkHint(key)
+                    dialog.dismiss()
                 },
                 "取消",
-                object :View.OnClickListener{
-                    override fun onClick(v: View?) {
-                        dialog.dismiss()
-
-                    }
-                }, object :View.OnClickListener{
-                    override fun onClick(v: View?) {
-                        dialog.dismiss()
-                    }
+                {
+                    dialog.dismiss()
+                }, {
+                    dialog.dismiss()
                 })
             dialog.setView(view)
             dialog.setCanceledOnTouchOutside(false)
@@ -182,25 +174,17 @@ class HintManagerPageMsKitView : AbsMsKitView() {
                 "小程序path和pid以,分隔", "eg:path,pid",
                 InputType.TYPE_CLASS_TEXT,
                 "确认",
-                object :View.OnClickListener{
-                    override fun onClick(v: View) {
-                        val content = v.tag as? String
-                        DevelopUtil.copyText(content)
-                        MsKit.getProxy()?.checkHint(KK_MINI)
-                        dialog.dismiss()
-                    }
-
+                {
+                    val content = it.tag as? String
+                    DevelopUtil.copyText(content)
+                    MsKit.getProxy()?.checkHint(KK_MINI)
+                    dialog.dismiss()
                 },
                 "取消",
-                object :View.OnClickListener{
-                    override fun onClick(v: View?) {
-                        dialog.dismiss()
-
-                    }
-                }, object :View.OnClickListener{
-                    override fun onClick(v: View?) {
-                        dialog.dismiss()
-                    }
+                {
+                    dialog.dismiss()
+                },{
+                    dialog.dismiss()
                 })
             dialog.setView(view)
             dialog.setCanceledOnTouchOutside(false)
@@ -218,27 +202,18 @@ class HintManagerPageMsKitView : AbsMsKitView() {
                 "key",
                 InputType.TYPE_CLASS_TEXT,
                 "确定",
-                object :View.OnClickListener{
-                    override fun onClick(v: View) {
-                        val content = v.tag as? String
-                        content?.run {
-                            MsKit.getProxy()?.checkHint(this)
-                        }
-                        dialog.dismiss()
+                {
+                    val content = it.tag as? String
+                    content?.run {
+                        MsKit.getProxy()?.checkHint(this)
                     }
-
+                    dialog.dismiss()
                 },
                 "取消",
-                object :View.OnClickListener{
-                    override fun onClick(v: View?) {
-                        dialog.dismiss()
-                    }
-
-                }, object :View.OnClickListener{
-                    override fun onClick(v: View?) {
-                        dialog.dismiss()
-                    }
-
+                {
+                    dialog.dismiss()
+                },{
+                    dialog.dismiss()
                 })
             dialog.setView(view)
             dialog.setCanceledOnTouchOutside(false)

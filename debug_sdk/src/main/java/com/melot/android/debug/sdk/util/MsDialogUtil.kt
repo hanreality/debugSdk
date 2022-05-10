@@ -15,7 +15,9 @@ import com.melot.android.debug.sdk.MsKit.isShow
 import com.melot.android.debug.sdk.MsKit.show
 import com.melot.android.debug.sdk.R
 
+typealias Funtionx = (view:View) -> Unit
 object MsDialogUtil {
+
     @JvmStatic
     fun getInputDialog(
         context: Context,
@@ -24,10 +26,10 @@ object MsDialogUtil {
         hint: String?,
         inputType: Int,
         positiveText: String?,
-        positiveListener: View.OnClickListener,
+        positiveListener: Funtionx,
         negativeText: String?,
-        negativeListener: View.OnClickListener,
-        closeDialogListener:View.OnClickListener
+        negativeListener: Funtionx,
+        closeDialogListener:Funtionx
     ): View {
         val view = LayoutInflater.from(context).inflate(R.layout.ms_input_dialog_layout, null)
         val titleView = view.findViewById<TextView>(R.id.dialog_title)
@@ -44,14 +46,14 @@ object MsDialogUtil {
         okButton.text = positiveText
         okButton.setOnClickListener {
             it.tag = if (editView.text == null) "" else editView.text.toString()
-            positiveListener.onClick(it)
+            positiveListener.invoke(it)
         }
         cancelButton.text = negativeText
         cancelButton.setOnClickListener {
-            negativeListener.onClick(it)
+            negativeListener.invoke(it)
         }
         closeDialog.setOnClickListener {
-            closeDialogListener.onClick(it)
+            closeDialogListener.invoke(it)
         }
         return view
     }
@@ -66,41 +68,33 @@ object MsDialogUtil {
                 "来尝试一下小圆球的功能吧", "请输入密码",
                 InputType.TYPE_TEXT_VARIATION_PASSWORD,
                 "确认",
-                object: View.OnClickListener {
-                    override fun onClick(v: View) {
-                        val content = v.tag as String
-                        val encrypt = AppUtils.shaEncrypt(content)
-                        if (TextUtils.equals(encrypt, MsKit.encrypt)) {
-                            if (isShow) {
-                                return
-                            }
-                            MMKVUtil.setBoolean("kk_debug_tool_enable", true)
-                            if (!installed) {
-                                install()
-                            }
-                            show()
-                            Toast.makeText(context, "小圆球已开启", Toast.LENGTH_LONG).show()
-                            dialog.dismiss()
-                        } else {
-                            Toast.makeText(context, "密码错误", Toast.LENGTH_LONG).show()
+                {
+                    val content = it.tag as String
+                    val encrypt = AppUtils.shaEncrypt(content)
+                    if (TextUtils.equals(encrypt, MsKit.encrypt)) {
+                        if (isShow) {
+                            return@getInputDialog
                         }
+                        MMKVUtil.setBoolean("kk_debug_tool_enable", true)
+                        if (!installed) {
+                            install()
+                        }
+                        show()
+                        Toast.makeText(context, "小圆球已开启", Toast.LENGTH_LONG).show()
+                        dialog.dismiss()
+                    } else {
+                        Toast.makeText(context, "密码错误", Toast.LENGTH_LONG).show()
                     }
-
                 },
                 context.resources.getString(
                     R.string.ms_dont_open_debug_tool,
                     if (MsKit.getProxy()?.debugConfig()?.serverDebug == true) "正式" else "测试"
                 ),
-                object :View.OnClickListener{
-                    override fun onClick(v: View) {
-                        MsKit.getProxy()?.changeServer()
-                        dialog.dismiss()
-                    }
-                },
-                object :View.OnClickListener{
-                    override fun onClick(v: View) {
-                        dialog.dismiss()
-                    }
+                {
+                    MsKit.getProxy()?.changeServer()
+                    dialog.dismiss()
+                },{
+                    dialog.dismiss()
                 })
             dialog.setView(view)
             dialog.setCanceledOnTouchOutside(false)
