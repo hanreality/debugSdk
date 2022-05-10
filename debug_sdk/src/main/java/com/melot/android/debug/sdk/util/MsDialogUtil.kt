@@ -73,6 +73,8 @@ object MsDialogUtil {
                     val encrypt = AppUtils.shaEncrypt(content)
                     if (TextUtils.equals(encrypt, MsKit.encrypt)) {
                         if (isShow) {
+                            Toast.makeText(context, "小圆球已开启", Toast.LENGTH_LONG).show()
+                            dialog.dismiss()
                             return@getInputDialog
                         }
                         MMKVUtil.setBoolean("kk_debug_tool_enable", true)
