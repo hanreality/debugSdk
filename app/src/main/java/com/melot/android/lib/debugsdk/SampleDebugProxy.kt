@@ -16,8 +16,8 @@ class SampleDebugProxy :IDebugProxy {
 
     }
 
-    override fun debugConfig(): DebugConfig? {
-        return DebugConfig("", true, "erhai")
+    override fun debugConfig(): DebugConfig {
+        return DebugConfig("", true, true, false,"erhai")
     }
 
     override fun quickLogin(id: String, pwd: String) {
@@ -26,5 +26,9 @@ class SampleDebugProxy :IDebugProxy {
 
     override fun getIcon(): Int {
         return R.mipmap.ic_launcher
+    }
+
+    override fun checkHint(key: String) {
+
     }
 }
