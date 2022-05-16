@@ -83,14 +83,19 @@ class QuickLoginInfoMsKitView : AbsMsKitView(), View.OnClickListener {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseStr = response.body()?.string()
-                model = DebugGsonUtil.GsonToBean(
-                    responseStr,
-                    object : TypeToken<DebugTestAccountModel>() {}.type
-                )
-                post(Runnable {
-                    adapter?.appendData(model?.data)
-                })
+                if (response.isSuccessful) {
+                    val responseStr = response.body()?.string()
+                    try {
+                        model = DebugGsonUtil.GsonToBean(
+                            responseStr,
+                            object : TypeToken<DebugTestAccountModel>() {}.type
+                        )
+                    } catch (e: Exception) {
+                    }
+                    post(Runnable {
+                        adapter?.appendData(model?.data)
+                    })
+                }
             }
         })
     }
