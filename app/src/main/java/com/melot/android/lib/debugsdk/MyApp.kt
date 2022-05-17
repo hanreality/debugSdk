@@ -15,6 +15,8 @@ class MyApp : Application() {
         KKSp.initialize(this)
         DoKit.Builder(this)
             .build()
-        MsKit.install(this, SampleDebugProxy())
+        MsKit.app = this
+        MsKit.setProxy(SampleDebugProxy())
+        MsKit.install()
     }
 }

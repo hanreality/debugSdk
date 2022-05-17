@@ -12,5 +12,6 @@ data class DebugConfig(
     var serverDebug: Boolean,
     var logDebug: Boolean,
     var forceNotCDN: Boolean,
+    var isExamine: Boolean,
     var appName: String
 )

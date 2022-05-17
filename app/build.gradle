@@ -46,3 +46,41 @@ dependencies {
     implementation 'com.tencent:mmkv-static:1.2.8'
     implementation 'com.melot.android:baseView:1.1.0'
 }
+
+project.tasks.each { task ->
+    if (task.name.startsWith('package') && task.name.endsWith('Release')) {
+         printf(task.name)
+    }
+}
+
+task insertBuildInfo() {
+    doLast {
+        if (!isReleaseBuildType()) {
+            File assertFile = file(rootDir.path + "/app/src/main/assets")
+            if (!assertFile.exists()) {
+                assertFile.mkdirs()
+            }
+            File file = file(assertFile.path + "/build-info.json")
+            if (file.exists()) {
+                file.delete()
+            } else {
+                file.createNewFile()
+            }
+            String content = "{\"build_time\": \"" + releaseTime() + "\"}\n"
+            file.write(content)
+        }
+    }
+}
+
+boolean isReleaseBuildType() {
+    for (String s: gradle.startParameter.taskNames) {
+        if (s.contains("Release") | s.contains("release")) {
+            return true
+        }
+    }
+    return false
+}
+
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone("GMT+08:00"))
+}

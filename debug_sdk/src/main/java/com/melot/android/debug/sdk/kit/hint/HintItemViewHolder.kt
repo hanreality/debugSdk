@@ -57,6 +57,14 @@ class HintItemViewHolder(var context: Context?, parent: ViewGroup?) : RecyclerVi
                 hintIcon.colorFilter = filter
                 hintName.text = "${item.name}(${opened})"
             }
+            KK_EXAMINE -> {
+                val isExamine = MsKit.getProxy()?.debugConfig()?.isExamine ?: false
+                val matrix = ColorMatrix()
+                matrix.setSaturation(if (isExamine) 1f else 0f)
+                val filter = ColorMatrixColorFilter(matrix)
+                hintIcon.colorFilter = filter
+                hintName.text = "${item.name}(${isExamine})"
+            }
         }
         itemView.setOnClickListener {
            listener?.onClick(item, position)
