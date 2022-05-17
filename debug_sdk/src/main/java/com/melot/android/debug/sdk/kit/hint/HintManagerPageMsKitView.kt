@@ -78,7 +78,7 @@ class HintManagerPageMsKitView : AbsMsKitView() {
                     KK_URTC,
                     KK_TEST,
                     KK_SWITCH,
-                    KK_EXAMINE,
+                    KK_EXAMINE
                     -> {
                         MsKit.getProxy()?.checkHint(item.hintKey)
                     }
