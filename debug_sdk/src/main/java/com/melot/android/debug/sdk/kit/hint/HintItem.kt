@@ -15,6 +15,7 @@ const val KK_MINI = "kk-mini"
 const val KK_TEST = "kk-test"
 const val KK_SWITCH = "kk-switch"
 const val KK_EXAMINE = "kk-examine"
+const val KK_SCAN = "kk-scan"
 const val MS_MORE = "ms-more"
 
 @Keep

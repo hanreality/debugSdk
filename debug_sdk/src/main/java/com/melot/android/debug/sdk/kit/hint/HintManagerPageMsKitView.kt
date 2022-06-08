@@ -54,6 +54,7 @@ class HintManagerPageMsKitView : AbsMsKitView() {
         hintItems.add(HintItem("测试页面", R.drawable.ms_ic_test, KK_TEST))
         hintItems.add(HintItem("配置信息", R.drawable.ms_ic_switch, KK_SWITCH))
         hintItems.add(HintItem("审核开关", R.drawable.ms_ic_examine, KK_EXAMINE))
+        hintItems.add(HintItem("二维码扫描", R.drawable.ms_ic_qr_code, KK_SCAN))
         hintItems.add(HintItem("更多操作", R.drawable.ms_ic_more, MS_MORE))
 
         adapter?.notifyDataSetChanged()
@@ -78,7 +79,8 @@ class HintManagerPageMsKitView : AbsMsKitView() {
                     KK_URTC,
                     KK_TEST,
                     KK_SWITCH,
-                    KK_EXAMINE
+                    KK_EXAMINE,
+                    KK_SCAN
                     -> {
                         MsKit.getProxy()?.checkHint(item.hintKey)
                     }
