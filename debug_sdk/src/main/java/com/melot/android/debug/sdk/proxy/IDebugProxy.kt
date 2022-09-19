@@ -16,4 +16,8 @@ interface IDebugProxy {
     fun getIcon(): Int
 
     fun checkHint(key: String)
+
+    fun mmkvSpKey() :String
+
+    fun hitKitConfig(): ArrayList<String>
 }

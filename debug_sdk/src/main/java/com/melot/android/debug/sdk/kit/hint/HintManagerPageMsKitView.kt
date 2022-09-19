@@ -43,18 +43,45 @@ class HintManagerPageMsKitView : AbsMsKitView() {
     }
 
     private fun initData() {
-        hintItems.add(HintItem("埋点悬浮框", R.drawable.ms_ic_watch, KK_STATISTIC))
-        hintItems.add(HintItem("修改渠道号", R.drawable.ms_ic_channel, KK_CHANNEL))
-        hintItems.add(HintItem("日志开关", R.drawable.ms_ic_log, KK_SHOW_LOG))
-        hintItems.add(HintItem("强制CDN", R.drawable.ms_ic_cdn, KK_CDN))
-        hintItems.add(HintItem("剪切板链接跳转", R.drawable.ms_ic_jump, KK_URL))
-        hintItems.add(HintItem("强制声网", R.drawable.ms_ic_force_agora, KK_AGORA))
-        hintItems.add(HintItem("强制urtc", R.drawable.ms_ic_force_urtc, KK_URTC))
-        hintItems.add(HintItem("跳转小程序", R.drawable.ms_ic_mini, KK_MINI))
-        hintItems.add(HintItem("测试页面", R.drawable.ms_ic_test, KK_TEST))
-        hintItems.add(HintItem("配置信息", R.drawable.ms_ic_switch, KK_SWITCH))
-        hintItems.add(HintItem("审核开关", R.drawable.ms_ic_examine, KK_EXAMINE))
-        hintItems.add(HintItem("二维码扫描", R.drawable.ms_ic_qr_code, KK_SCAN))
+        val configs = MsKit.getProxy()?.hitKitConfig()
+        configs?.run {
+            if (contains(KK_STATISTIC)) {
+                hintItems.add(HintItem("埋点悬浮框", R.drawable.ms_ic_watch, KK_STATISTIC))
+            }
+            if (contains(KK_CHANNEL)) {
+                hintItems.add(HintItem("修改渠道号", R.drawable.ms_ic_channel, KK_CHANNEL))
+            }
+            if (contains(KK_SHOW_LOG)) {
+                hintItems.add(HintItem("日志开关", R.drawable.ms_ic_log, KK_SHOW_LOG))
+            }
+            if (contains(KK_CDN)) {
+                hintItems.add(HintItem("强制CDN", R.drawable.ms_ic_cdn, KK_CDN))
+            }
+            if (contains(KK_URL)) {
+                hintItems.add(HintItem("剪切板链接跳转", R.drawable.ms_ic_jump, KK_URL))
+            }
+            if (contains(KK_AGORA)) {
+                hintItems.add(HintItem("强制声网", R.drawable.ms_ic_force_agora, KK_AGORA))
+            }
+            if (contains(KK_URTC)) {
+                hintItems.add(HintItem("强制urtc", R.drawable.ms_ic_force_urtc, KK_URTC))
+            }
+            if (contains(KK_MINI)) {
+                hintItems.add(HintItem("跳转小程序", R.drawable.ms_ic_mini, KK_MINI))
+            }
+            if (contains(KK_TEST)) {
+                hintItems.add(HintItem("测试页面", R.drawable.ms_ic_test, KK_TEST))
+            }
+            if (contains(KK_SWITCH)) {
+                hintItems.add(HintItem("配置信息", R.drawable.ms_ic_switch, KK_SWITCH))
+            }
+            if (contains(KK_EXAMINE)) {
+                hintItems.add(HintItem("审核开关", R.drawable.ms_ic_examine, KK_EXAMINE))
+            }
+            if (contains(KK_SCAN)) {
+                hintItems.add(HintItem("二维码扫描", R.drawable.ms_ic_qr_code, KK_SCAN))
+            }
+        }
         hintItems.add(HintItem("更多操作", R.drawable.ms_ic_more, MS_MORE))
 
         adapter?.notifyDataSetChanged()

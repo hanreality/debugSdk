@@ -3,6 +3,8 @@ package com.melot.android.debug.sdk.util;
 import android.text.TextUtils;
 
 import com.melot.android.KKSp;
+import com.melot.android.debug.sdk.MsKit;
+import com.melot.android.debug.sdk.proxy.IDebugProxy;
 
 import java.util.Set;
 
@@ -14,7 +16,8 @@ public class MMKVUtil {
     private static KKSp kkSp;
     private static KKSp getKKsp() {
         if (kkSp == null) {
-            kkSp = KKSp.getSp("kksp");
+            IDebugProxy proxy = MsKit.INSTANCE.getProxy();
+            kkSp = KKSp.getSp(proxy == null ? "kksp" : proxy.mmkvSpKey());
         }
         return kkSp;
     }

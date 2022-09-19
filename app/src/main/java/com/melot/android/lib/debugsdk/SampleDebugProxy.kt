@@ -1,5 +1,6 @@
 package com.melot.android.lib.debugsdk
 
+import com.melot.android.debug.sdk.kit.hint.*
 import com.melot.android.debug.sdk.proxy.DebugConfig
 import com.melot.android.debug.sdk.proxy.IDebugProxy
 
@@ -31,4 +32,27 @@ class SampleDebugProxy :IDebugProxy {
     override fun checkHint(key: String) {
 
     }
+
+    override fun mmkvSpKey(): String {
+        return "kksp"
+    }
+
+    override fun hitKitConfig(): ArrayList<String> {
+        return ArrayList<String>().run {
+            add(KK_STATISTIC)
+            add(KK_CHANNEL)
+            add(KK_SHOW_LOG)
+            add(KK_CDN)
+            add(KK_URL)
+            add(KK_AGORA)
+            add(KK_URTC)
+            add(KK_MINI)
+            add(KK_TEST)
+            add(KK_SWITCH)
+            add(KK_EXAMINE)
+            add(KK_SCAN)
+            this
+        }
+    }
+
 }
