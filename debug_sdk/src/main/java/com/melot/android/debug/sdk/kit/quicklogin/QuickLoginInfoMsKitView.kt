@@ -68,7 +68,7 @@ class QuickLoginInfoMsKitView : AbsMsKitView(), View.OnClickListener {
 
     private fun getData() {
         val url =
-            "http://10.0.6.34:8049/getTestAccountList?debug=" + MsKit.getProxy()
+            "http://10.0.7.79:8049/getTestAccountList?debug=" + MsKit.getProxy()
                 ?.debugConfig()?.serverDebug + "&appName=" + MsKit.getProxy()
                 ?.debugConfig()?.appName
         val okHttpClient = OkHttpClient()

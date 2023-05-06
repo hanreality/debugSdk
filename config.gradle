@@ -9,8 +9,6 @@ static def addRepository(RepositoryHandler handler) {
     handler.maven { url "https://jitpack.io" }
     handler.maven { url 'http://10.4.255.180:8081/nexus/content/repositories/android-releases/' }
     handler.maven { url 'http://10.4.255.180:8081/nexus/content/repositories/android-snapshots/' }
-    handler.maven { url 'http://10.0.6.34:8081/repository/jjyp_release/' }
-    handler.maven { url 'http://10.0.6.34:8081/repository/jjyp_snapshots/' }
 }
 
 // 添加到全局的变量中
