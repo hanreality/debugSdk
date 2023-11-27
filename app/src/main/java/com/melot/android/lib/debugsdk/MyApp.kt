@@ -4,6 +4,7 @@ import android.app.Application
 import com.didichuxing.doraemonkit.DoKit
 import com.melot.android.KKSp
 import com.melot.android.debug.sdk.MsKit
+import com.tencent.mmkv.MMKV
 
 /**
  * Author: han.chen
@@ -12,7 +13,7 @@ import com.melot.android.debug.sdk.MsKit
 class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        KKSp.initialize(this)
+        MMKV.initialize(this)
         DoKit.Builder(this)
             .build()
         MsKit.app = this

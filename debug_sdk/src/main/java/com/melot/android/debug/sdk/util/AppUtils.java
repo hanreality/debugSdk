@@ -35,7 +35,7 @@ public class AppUtils {
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(0);
     }
-    private static Intent getLaunchAppIntent(String pkgName) {
+    public static Intent getLaunchAppIntent(String pkgName) {
         String launcherActivity = getLauncherActivity(pkgName);
         if (TextUtils.isEmpty(launcherActivity)) {
             return null;
@@ -45,7 +45,7 @@ public class AppUtils {
         intent.setClassName(pkgName, launcherActivity);
         return intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
-    private static String getLauncherActivity(@NonNull String pkg) {
+    public static String getLauncherActivity(@NonNull String pkg) {
         if (TextUtils.isEmpty(pkg)) {
             return "";
         }

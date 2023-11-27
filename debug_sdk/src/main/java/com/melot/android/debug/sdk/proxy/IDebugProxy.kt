@@ -1,5 +1,7 @@
 package com.melot.android.debug.sdk.proxy
 
+import com.tencent.mmkv.MMKV
+
 /**
  * Author: han.chen
  * Time: 2021/9/9 17:10
@@ -17,7 +19,7 @@ interface IDebugProxy {
 
     fun checkHint(key: String)
 
-    fun mmkvSpKey() :String
+    fun getMMKV() :MMKV?
 
     fun hitKitConfig(): ArrayList<String>
 }

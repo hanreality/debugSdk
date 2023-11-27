@@ -308,7 +308,7 @@ object DevelopUtil {
             return true
         } else if (TextUtils.equals(decorView?.javaClass?.name, "android.widget.PopupWindow\$PopupDecorView")) {
             val clazzName = ((decorView as? ViewGroup)?.getChildAt(0) as? ViewGroup)?.getChildAt(0)?.javaClass?.name
-            return !TextUtils.equals(clazzName, "com.melot.kkcommon.widget.KeyboardPopLayout")
+            return clazzName?.contains("KeyboardPopLayout") != true
         }
         return false
     }

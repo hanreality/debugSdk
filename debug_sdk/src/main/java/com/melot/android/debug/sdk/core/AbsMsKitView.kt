@@ -200,9 +200,9 @@ abstract class AbsMsKitView : MsKitView, MsKitViewManager.MsKitViewAttachedListe
                     FrameLayout.LayoutParams.WRAP_CONTENT
                 )
                     .apply {
-                        gravity = GravityCompat.START or Gravity.TOP
+                        gravity = Gravity.LEFT or Gravity.TOP
                     }
-                mMsKitViewLayoutParams.gravity = GravityCompat.START or Gravity.TOP
+                mMsKitViewLayoutParams.gravity = Gravity.LEFT or Gravity.TOP
             } else {
                 systemLayoutParams = WindowManager.LayoutParams()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -229,9 +229,9 @@ abstract class AbsMsKitView : MsKitView, MsKitViewManager.MsKitViewAttachedListe
                 }
                 systemLayoutParams?.apply {
                     format = PixelFormat.TRANSPARENT
-                    gravity = GravityCompat.START or Gravity.TOP
+                    gravity = Gravity.LEFT or Gravity.TOP
                 }
-                mMsKitViewLayoutParams.gravity = GravityCompat.START or Gravity.TOP
+                mMsKitViewLayoutParams.gravity = Gravity.LEFT or Gravity.TOP
                 //动态注册关闭系统弹窗的广播
                 val intentFilter = IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
                 context.registerReceiver(mInnerReceiver, intentFilter)

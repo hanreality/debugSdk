@@ -2,9 +2,9 @@ package com.melot.android.debug.sdk.util;
 
 import android.text.TextUtils;
 
-import com.melot.android.KKSp;
 import com.melot.android.debug.sdk.MsKit;
 import com.melot.android.debug.sdk.proxy.IDebugProxy;
+import com.tencent.mmkv.MMKV;
 
 import java.util.Set;
 
@@ -13,33 +13,33 @@ import java.util.Set;
  * Time: 2021/12/7 10:01
  */
 public class MMKVUtil {
-    private static KKSp kkSp;
-    private static KKSp getKKsp() {
-        if (kkSp == null) {
+    private static MMKV mmkv;
+    private static MMKV getMMKV() {
+        if (mmkv == null) {
             IDebugProxy proxy = MsKit.INSTANCE.getProxy();
-            kkSp = KKSp.getSp(proxy == null ? "kksp" : proxy.mmkvSpKey());
+            mmkv = (proxy == null || proxy.getMMKV() == null) ? MMKV.defaultMMKV() : proxy.getMMKV();
         }
-        return kkSp;
+        return mmkv;
     }
 
     public static void setBoolean(String key, boolean value) {
-        getKKsp().putBoolean(key, value);
+        getMMKV().putBoolean(key, value);
     }
 
     public static void setString(String key, String value) {
-        getKKsp().putString(key, value);
+        getMMKV().putString(key, value);
     }
 
     public static void setInt(String key, int value) {
-        getKKsp().putInt(key, value);
+        getMMKV().putInt(key, value);
     }
 
     public static void setFloat(String key, float value) {
-        getKKsp().putFloat(key, value);
+        getMMKV().putFloat(key, value);
     }
 
     public static void setLong(String key, long value) {
-        getKKsp().putLong(key, value);
+        getMMKV().putLong(key, value);
     }
 
     public static boolean getBoolean(String key) {
@@ -47,7 +47,7 @@ public class MMKVUtil {
     }
 
     public static boolean getBoolean(String key, boolean defaultValue) {
-        return getKKsp().getBoolean(key, defaultValue);
+        return getMMKV().getBoolean(key, defaultValue);
     }
 
     public static int getInt(String key) {
@@ -55,7 +55,7 @@ public class MMKVUtil {
     }
 
     public static int getInt(String key, int defaultValue) {
-        return getKKsp().getInt(key, defaultValue);
+        return getMMKV().getInt(key, defaultValue);
     }
 
     public static String getString(String key) {
@@ -63,7 +63,7 @@ public class MMKVUtil {
     }
 
     public static String getString(String key, String defaultValue) {
-        return getKKsp().getString(key, defaultValue);
+        return getMMKV().getString(key, defaultValue);
     }
 
     public static float getFloat(String key) {
@@ -71,7 +71,7 @@ public class MMKVUtil {
     }
 
     public static float getFloat(String key, float defaultValue) {
-        return getKKsp().getFloat(key, defaultValue);
+        return getMMKV().getFloat(key, defaultValue);
     }
 
     public static long getLong(String key) {
@@ -79,30 +79,30 @@ public class MMKVUtil {
     }
 
     public static long getLong(String key, long defaultValue) {
-        return getKKsp().getLong(key, defaultValue);
+        return getMMKV().getLong(key, defaultValue);
     }
 
     public static void removeData(String key) {
-        getKKsp().remove(key);
+        getMMKV().remove(key);
     }
 
     public static String[] allKeys() {
-        return getKKsp().allKeys();
+        return getMMKV().allKeys();
     }
 
     public static Object getObjectValue(String key) {
         String value = getString(key);
         if (!TextUtils.isEmpty(value)) {
             if (value.charAt(0) == 0x01) {
-                return getKKsp().getMmkv().decodeStringSet(key);
+                return getMMKV().decodeStringSet(key);
             } else {
                 return value;
             }
         }
-        Set<String> set = getKKsp().getMmkv().decodeStringSet(key);
+        Set<String> set = getMMKV().decodeStringSet(key);
         if (set != null && set.size() == 0) {
-            float valueFloat = getKKsp().getMmkv().decodeFloat(key);
-            double valueDouble = getKKsp().getMmkv().decodeDouble(key);
+            float valueFloat = getMMKV().decodeFloat(key);
+            double valueDouble = getMMKV().decodeDouble(key);
             if (Float.compare(valueFloat, 0f) == 0 || Float.compare(valueFloat, Float.NaN) == 0) {
                 return valueFloat;
             } else {
@@ -110,8 +110,8 @@ public class MMKVUtil {
             }
         }
 
-        int valueInt = getKKsp().getMmkv().decodeInt(key);
-        long valueLong = getKKsp().getMmkv().decodeLong(key);
+        int valueInt = getMMKV().decodeInt(key);
+        long valueLong = getMMKV().decodeLong(key);
         if (valueInt != valueLong) {
             return valueLong;
         } else {
@@ -128,9 +128,9 @@ public class MMKVUtil {
                 return "String";
             }
         }
-        Set<String> set = getKKsp().getMmkv().decodeStringSet(key);
+        Set<String> set = getMMKV().decodeStringSet(key);
         if (set != null && set.size() == 0) {
-            float valueFloat = getKKsp().getMmkv().decodeFloat(key);
+            float valueFloat = getMMKV().decodeFloat(key);
             if (Float.compare(valueFloat, 0f) == 0 || Float.compare(valueFloat, Float.NaN) == 0) {
                 return "double";
             } else {
@@ -138,8 +138,8 @@ public class MMKVUtil {
             }
         }
 
-        int valueInt = getKKsp().getMmkv().decodeInt(key);
-        long valueLong = getKKsp().getMmkv().decodeLong(key);
+        int valueInt = getMMKV().decodeInt(key);
+        long valueLong = getMMKV().decodeLong(key);
         if (valueInt != valueLong) {
             return "long";
         } else {

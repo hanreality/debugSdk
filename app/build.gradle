@@ -44,7 +44,7 @@ dependencies {
     releaseImplementation 'io.github.didi.dokit:dokitx-no-op:3.5.0.1'
     implementation 'com.melot.android:kksp:1.0.6'
     implementation 'com.tencent:mmkv-static:1.2.8'
-    implementation 'com.melot.android:baseView:1.1.0'
+    implementation project(':localRepo:baseView')
 }
 
 project.tasks.each { task ->

@@ -3,6 +3,7 @@ package com.melot.android.lib.debugsdk
 import com.melot.android.debug.sdk.kit.hint.*
 import com.melot.android.debug.sdk.proxy.DebugConfig
 import com.melot.android.debug.sdk.proxy.IDebugProxy
+import com.tencent.mmkv.MMKV
 
 /**
  * Author: han.chen
@@ -33,8 +34,8 @@ class SampleDebugProxy :IDebugProxy {
 
     }
 
-    override fun mmkvSpKey(): String {
-        return "kksp"
+    override fun getMMKV(): MMKV? {
+        return MMKV.defaultMMKV()
     }
 
     override fun hitKitConfig(): ArrayList<String> {
