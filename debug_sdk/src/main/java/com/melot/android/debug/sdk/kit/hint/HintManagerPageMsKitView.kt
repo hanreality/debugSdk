@@ -81,6 +81,9 @@ class HintManagerPageMsKitView : AbsMsKitView() {
             if (contains(KK_SCAN)) {
                 hintItems.add(HintItem("二维码扫描", R.drawable.ms_ic_qr_code, KK_SCAN))
             }
+            if (contains(MS_ROOM)) {
+                hintItems.add(HintItem("快捷进房间", R.drawable.ms_ic_room, MS_ROOM))
+            }
         }
         hintItems.add(HintItem("更多操作", R.drawable.ms_ic_more, MS_MORE))
 
@@ -119,6 +122,9 @@ class HintManagerPageMsKitView : AbsMsKitView() {
                     }
                     MS_MORE -> {
                         showMoreDialog()
+                    }
+                    MS_ROOM -> {
+                        showEnterRoomDialog()
                     }
                 }
                 detach()
@@ -237,6 +243,35 @@ class HintManagerPageMsKitView : AbsMsKitView() {
                     val content = it.tag as? String
                     content?.run {
                         MsKit.getProxy()?.checkHint(this)
+                    }
+                    dialog.dismiss()
+                },
+                "取消",
+                {
+                    dialog.dismiss()
+                },{
+                    dialog.dismiss()
+                })
+            dialog.setView(view)
+            dialog.setCanceledOnTouchOutside(false)
+            dialog.show()
+        }
+    }
+
+    private fun showEnterRoomDialog() {
+        ActivityUtils.getTopActivity()?.run {
+            val dialog = AlertDialog.Builder(this).create()
+            val view = MsDialogUtil.getInputDialog(
+                this,
+                "跳转直播间",
+                "",
+                "actorId",
+                InputType.TYPE_CLASS_TEXT,
+                "进直播间",
+                {
+                    val content = it.tag as? String
+                    content?.run {
+                        MsKit.getProxy()?.checkHint("${MS_ROOM}=$this")
                     }
                     dialog.dismiss()
                 },

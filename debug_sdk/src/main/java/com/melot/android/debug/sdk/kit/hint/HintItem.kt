@@ -17,6 +17,7 @@ const val KK_SWITCH = "kk-switch"
 const val KK_EXAMINE = "kk-examine"
 const val KK_SCAN = "kk-scan"
 const val MS_MORE = "ms-more"
+const val MS_ROOM = "ms-room"
 
 @Keep
 data class HintItem(val name:String, @DrawableRes val resourceId: Int, val hintKey:String)

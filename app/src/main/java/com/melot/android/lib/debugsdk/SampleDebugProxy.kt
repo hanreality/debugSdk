@@ -52,6 +52,7 @@ class SampleDebugProxy :IDebugProxy {
             add(KK_SWITCH)
             add(KK_EXAMINE)
             add(KK_SCAN)
+            add(MS_ROOM)
             this
         }
     }
